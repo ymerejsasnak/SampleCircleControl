@@ -1,7 +1,15 @@
 /*
 
--put audio stuff in its own class(es?)
--more circles controlling more things (filter, delay, etc)
+
+-more circles controlling more things (one existing now is temporary/test)
+  -rate and direction (DONE)
+  -volume and pan
+  -loop start, loop end 
+  -lp filter rez and freq
+  -hp filter rez and freq (parallel or serial with above?)
+  -delay time and fback
+  -grain stuff (change SamplePlayer to GranularSamplePlayer)
+  
 -size of circle changeable with mousewheel (indicates random range of values w/in circle)
 -draw output sample data
 -? way to record circle movements that it can then run through in loop?
@@ -13,41 +21,22 @@
 import beads.*;
 
 
-AudioContext audioContext;
-SamplePlayer sampler;
-Gain gain;
-Glide pitchGlide, gainGlide;
+SamplerAudio samplerAudio;
 
 CircleControl circle;
-
-int playDirection = 1;
 
 
 void setup() {
   
- size(800, 800);
- background(0);
- ellipseMode(CENTER);
- 
- circle = new CircleControl(width/2, height/2);
- 
- 
- audioContext = new AudioContext();
- 
- sampler = new SamplePlayer(audioContext, SampleManager.sample(dataPath("drums.wav")));
- sampler.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
- gain = new Gain(audioContext, 2, 0.4);
- 
- pitchGlide = new Glide(audioContext, 1, 50);
- sampler.setRate(pitchGlide);
- 
- gainGlide = new Glide(audioContext, 0.4, 50);
- gain.setGain(gainGlide);
- 
- gain.addInput(sampler);
- audioContext.out.addInput(gain);
- 
- audioContext.start();
+  size(800, 800);
+  background(0);
+  ellipseMode(CENTER);
+   
+   
+  circle = new CircleControl(width/2, height/2);
+   
+  samplerAudio = new SamplerAudio();
+
 }
 
 
@@ -57,17 +46,11 @@ void draw() {
   circle.display();
   
  
- 
   
 }
 
 void mousePressed() {
-  if (mouseButton == RIGHT) {
-    playDirection = -playDirection; 
-    float pitch = map(circle.getX(), 0, width, 0, 2);
-    pitchGlide.setValue(pitch * playDirection);
-    return;
-  }
+  
   
   if (circle.mouseInside(mouseX, mouseY)) {
     circle.setPressed();
@@ -80,11 +63,18 @@ void mouseDragged() {
   if (circle.isPressed()) {
     circle.move(mouseX, mouseY); 
     
-    float pitch = map(circle.getX(), 0, width, 0, 2);
-    pitchGlide.setValue(pitch * playDirection);
+    float playRate = map(circle.getY(), 0, height, 2, 0);
+    samplerAudio.setPlayRate(playRate);
     
-    float gain = map(circle.getY(), 0, height, 0.4, 0.0);
-    gainGlide.setValue(gain);
+    if (mouseX < width/2) {
+      samplerAudio.setPlayReverse(); 
+    }
+    else {
+      samplerAudio.setPlayForward(); 
+    }
+    
+    //float gain = map(circle.getY(), 0, height, 1, 0.0);
+    //gainGlide.setValue(gain);
  
   }
   
