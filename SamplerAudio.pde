@@ -8,7 +8,7 @@ class SamplerAudio {
   
   int playDirection = 1;
   
-  String filename = dataPath("dog.WAV");
+  String filename = dataPath("horns.wav");
   
   
   SamplerAudio() {

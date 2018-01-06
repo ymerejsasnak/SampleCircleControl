@@ -1,8 +1,9 @@
 /*
 
 
--more circles controlling more things (one existing now is temporary/test)
-  -rate and direction (DONE)
+-more circles controlling more things
+  (put stuff in mousedragged method into a circle.update method, then subclass the circle class for each
+   separate circle, and each has its own unique update method (does conversion of values and setting beads, etc)
   -volume and pan
   -loop start, loop end 
   -lp filter rez and freq
@@ -10,13 +11,15 @@
   -delay time and fback
   -grain stuff (change SamplePlayer to GranularSamplePlayer)
   
--size of circle changeable with mousewheel (indicates random range of values w/in circle)
--draw output sample data
+
+??-size of circle changeable with mousewheel (indicates random range of values w/in circle)
+-draw output sample data (or draw wav file with a play indicator and loop markers, etc
 -? way to record circle movements that it can then run through in loop?
 
 */
 
-
+final int BORDER = 50;
+final int GRID_DIVISIONS = 4;
 
 import beads.*;
 
@@ -24,6 +27,7 @@ import beads.*;
 SamplerAudio samplerAudio;
 
 CircleControl circle;
+Grid grid;
 
 
 void setup() {
@@ -31,8 +35,8 @@ void setup() {
   size(800, 800);
   background(0);
   ellipseMode(CENTER);
-   
-   
+  
+  grid = new Grid(GRID_DIVISIONS);
   circle = new CircleControl(width/2, height/2);
    
   samplerAudio = new SamplerAudio();
@@ -43,44 +47,8 @@ void setup() {
 
 void draw() {
   background(0);
+  
   circle.display();
   
- 
-  
-}
-
-void mousePressed() {
-  
-  
-  if (circle.mouseInside(mouseX, mouseY)) {
-    circle.setPressed();
-    circle.calculateOffset(mouseX, mouseY); 
-  }
-}
-
-
-void mouseDragged() {
-  if (circle.isPressed()) {
-    circle.move(mouseX, mouseY); 
-    
-    float playRate = map(circle.getY(), 0, height, 2, 0);
-    samplerAudio.setPlayRate(playRate);
-    
-    if (mouseX < width/2) {
-      samplerAudio.setPlayReverse(); 
-    }
-    else {
-      samplerAudio.setPlayForward(); 
-    }
-    
-    //float gain = map(circle.getY(), 0, height, 1, 0.0);
-    //gainGlide.setValue(gain);
- 
-  }
-  
-}
-
-
-void mouseReleased() {
-  circle.setReleased(); 
+  grid.display();
 }

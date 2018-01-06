@@ -9,7 +9,7 @@ class CircleControl {
  CircleControl(int x, int y) {
    this.x = x;
    this.y = y;
-   diameter = 50;
+   diameter = 20;
    pressed = false;
  }
  
@@ -53,6 +53,12 @@ class CircleControl {
  void move(int newX, int newY) {
    x = newX + offsetX;
    y = newY + offsetY;
+   
+   //constrain to grid
+   if (x < BORDER) x = BORDER;
+   if (x > width - BORDER) x = width - BORDER;
+   if (y < BORDER) y = BORDER;
+   if (y > height - BORDER) y = height - BORDER;
  }
  
  
