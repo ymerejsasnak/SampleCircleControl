@@ -102,7 +102,7 @@ class RateCircle extends CircleControl {
   void updateUgen() {
     
     float playRate = map(y, BORDER, height - BORDER, 2, 0);
-    samplerAudio.setPitch(playRate);
+    samplerAudio.setRate(playRate);
     
     if (mouseX < width/2) {
       samplerAudio.setPlayReverse(); 
@@ -125,31 +125,15 @@ class LoopCircle extends CircleControl {
   
   void updateUgen() {
     
-    float loopStart = map(y, BORDER, height - BORDER, 0.0, 1.0);
-    float loopLength = map(x, BORDER, width - BORDER, 0.01, 1.0);
+    float loopStart = map(y, height - BORDER, BORDER, 0.0, .9);
+    float loopLength = map(x, BORDER, width - BORDER, 1.0, 0.01);
     
     samplerAudio.setLoopStart(loopStart);
     samplerAudio.setLoopLength(loopLength);
     
-    
-  }
-}
-
-
-
-class GrainCircle extends CircleControl {
- 
-  GrainCircle(int x, int y) {
-    super(x, y);
-    fillColor = color(0, 0, 200);
-  }
-  
-  void updateUgen() {
-    
-    float grainInterval = map(x, BORDER, width - BORDER, 1, 20);
-    float grainSize = map(y, BORDER, height - BORDER, 1, 10);
-    
-    samplerAudio.setGrainInterval(grainInterval);
-    samplerAudio.setGrainSize(grainSize);
+    // if position gets out of loop boundaries, put it back to loop start
+    if (!samplerAudio.sampler.inLoop()) {
+      samplerAudio.sampler.setToLoopStart();
+    }
   }
 }

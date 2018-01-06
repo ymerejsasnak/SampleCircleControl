@@ -4,14 +4,16 @@ class SamplerAudio {
   
   int sampleLength;
   
-  GranularSamplePlayer sampler;
+  SamplePlayer sampler;
   Gain gain;
   Glide gainGlide;
-  Glide pitchGlide, directionGlide;
+  Glide rateGlide, directionGlide;
   Glide startGlide, endGlide;
-  Glide grainIntervalGlide, grainSizeGlide;
+  
+  int playDirection = 1;
+ 
     
-  String filename = dataPath("dog.WAV");
+  String filename = dataPath("drums.wav");
   
   
   SamplerAudio() {
@@ -19,7 +21,7 @@ class SamplerAudio {
     audioContext = new AudioContext();
     
     try {
-      sampler = new GranularSamplePlayer(audioContext, SampleManager.sample(filename));
+      sampler = new SamplePlayer(audioContext, SampleManager.sample(filename));
     }
     catch (Exception e) {
       println("error");
@@ -35,21 +37,15 @@ class SamplerAudio {
     gainGlide = new Glide(audioContext, 0.4, 50);
     gain.setGain(gainGlide);
     
-    pitchGlide = new Glide(audioContext, 1, 50);
-    sampler.setPitch(pitchGlide);
-    
+    rateGlide = new Glide(audioContext, 1, 50);
     directionGlide = new Glide(audioContext, 1, 50);
-    sampler.setRate(directionGlide);
+    sampler.setRate(rateGlide);
       
     startGlide = new Glide(audioContext, 0, 50);
     sampler.setLoopStart(startGlide);
     endGlide = new Glide(audioContext, sampleLength, 50);
     sampler.setLoopEnd(endGlide);
     
-    grainIntervalGlide = new Glide(audioContext, 1, 50);
-    sampler.setGrainInterval(grainIntervalGlide);
-    grainSizeGlide = new Glide(audioContext, 1, 50);
-    sampler.setGrainSize(grainSizeGlide);
        
     gain.addInput(sampler);
     audioContext.out.addInput(gain);
@@ -59,17 +55,17 @@ class SamplerAudio {
   
   
   void setPlayForward() {
-    directionGlide.setValue(1);
+    playDirection = 1;
   }
   
   
   void setPlayReverse() {
-    directionGlide.setValue(-1);
+    playDirection = -1;
   }
   
   
-  void setPitch(float pitch) {
-    pitchGlide.setValue(pitch);
+  void setRate(float rate) {
+    rateGlide.setValue(rate * playDirection);
   }
   
   
@@ -80,19 +76,12 @@ class SamplerAudio {
   void setLoopLength(float loopLength) {
     float loopEnd = startGlide.getValue() + loopLength * sampleLength;
     if (loopEnd > sampleLength) {
-      loopEnd = sampleLength;
+      loopEnd = sampleLength - 1;
     }
     endGlide.setValue(loopEnd); 
   }
   
-  void setGrainInterval(float interval) {
-    grainIntervalGlide.setValue(interval); 
-  }
-  
-  void setGrainSize(float size) {
-     grainSizeGlide.setValue(size);
-  }
-  
+ 
   
   
 }

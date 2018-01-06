@@ -5,10 +5,10 @@
    //-volume and pan
   -loop start, loop end (DONE but work on it more so it makes more sense?)
   -lp filter rez and freq
-  -hp filter rez and freq (parallel or serial with above?)
+  -hp filter rez and freq (parallel! or serial with above?)
   -delay time and fback
-  -grain stuff (did size and interval...needs work to sound good)
-  
+  -combfilter?
+
 
 ??-size of circle changeable with mousewheel (indicates random range of values w/in circle) [[actual separate rect]]
 -draw output sample data (or draw wav file with a play indicator and loop markers, etc
@@ -36,14 +36,12 @@ void setup() {
   ellipseMode(CENTER);
   
   grid = new Grid(GRID_DIVISIONS);
-  //rateCircle = new RateCircle(width/2, height/2);
-  
+
   circles = new ArrayList<CircleControl>();
   
   circles.add(new RateCircle(width/2, height/2));
-  circles.add(new LoopCircle(width - BORDER, BORDER));
-  circles.add(new GrainCircle(width/4, height/4));
-   
+  circles.add(new LoopCircle(BORDER, height - BORDER));
+  
   samplerAudio = new SamplerAudio();
 
 }
