@@ -4,10 +4,10 @@
 -more circles controlling more things  (can probably make updateUgen method in subclasses more 'dry')
    //-volume and pan
   -loop start, loop end (DONE but work on it more so it makes more sense?)
-  -lp filter rez and freq
-  -hp filter rez and freq (parallel! or serial with above?)
-  -delay time and fback
-  -combfilter?
+  1-lp filter rez and freq
+  2-hp filter rez and freq (parallel! or serial with above?)
+  4-delay time and fback (typical delay)
+  3-combfilter style delay
 
 
 ??-size of circle changeable with mousewheel (indicates random range of values w/in circle) [[actual separate rect]]
@@ -41,6 +41,7 @@ void setup() {
   
   circles.add(new RateCircle(width/2, height/2));
   circles.add(new LoopCircle(BORDER, height - BORDER));
+  circles.add(new FilterCircle(BORDER, BORDER));
   
   samplerAudio = new SamplerAudio();
 

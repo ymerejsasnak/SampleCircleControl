@@ -125,8 +125,8 @@ class LoopCircle extends CircleControl {
   
   void updateUgen() {
     
-    float loopStart = map(y, height - BORDER, BORDER, 0.0, .9);
-    float loopLength = map(x, BORDER, width - BORDER, 1.0, 0.01);
+    float loopStart = map(y, height - BORDER, BORDER, 0.0, .999);
+    float loopLength = map(x, BORDER, width - BORDER, 1.0, 0.001);
     
     samplerAudio.setLoopStart(loopStart);
     samplerAudio.setLoopLength(loopLength);
@@ -135,5 +135,23 @@ class LoopCircle extends CircleControl {
     if (!samplerAudio.sampler.inLoop()) {
       samplerAudio.sampler.setToLoopStart();
     }
+  }
+}
+
+
+class FilterCircle extends CircleControl {
+ 
+  FilterCircle(int x, int y) {
+    super(x, y);
+    fillColor = color(0, 0, 200);
+  }
+  
+  void updateUgen() {
+    
+    float filterFreq = map(y, BORDER, height - BORDER, 11025.0, 0.0);
+    float filterRez = map(x, BORDER, width - BORDER, .4, .9);
+    
+    samplerAudio.setFilterFreq(filterFreq);
+    samplerAudio.setFilterRez(filterRez);
   }
 }

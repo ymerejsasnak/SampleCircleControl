@@ -5,15 +5,20 @@ class SamplerAudio {
   int sampleLength;
   
   SamplePlayer sampler;
+  LPRezFilter filter;
+   
   Gain gain;
+ 
+  
   Glide gainGlide;
   Glide rateGlide, directionGlide;
   Glide startGlide, endGlide;
+  Glide lpFreqGlide, lpRezGlide;
   
   int playDirection = 1;
  
     
-  String filename = dataPath("drums.wav");
+  String filename = dataPath("horns.wav");
   
   
   SamplerAudio() {
@@ -32,11 +37,7 @@ class SamplerAudio {
     sampler.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
     sampler.setToLoopStart();
     sampler.setKillOnEnd(false);
-    
-    gain = new Gain(audioContext, 2, 0.4);
-    gainGlide = new Glide(audioContext, 0.4, 50);
-    gain.setGain(gainGlide);
-    
+        
     rateGlide = new Glide(audioContext, 1, 50);
     directionGlide = new Glide(audioContext, 1, 50);
     sampler.setRate(rateGlide);
@@ -46,9 +47,18 @@ class SamplerAudio {
     endGlide = new Glide(audioContext, sampleLength, 50);
     sampler.setLoopEnd(endGlide);
     
-       
-    gain.addInput(sampler);
-    audioContext.out.addInput(gain);
+    lpFreqGlide = new Glide(audioContext, 11025, 50);
+    lpRezGlide = new Glide(audioContext, .4, 50);
+    filter = new LPRezFilter(audioContext, 2 /*channels*/, lpFreqGlide, lpRezGlide);
+    
+      
+    //gainGlide = new Glide(audioContext, 0.6, 50);
+    //gain = new Gain(audioContext, 2, gainGlide);
+    
+    
+    filter.addInput(sampler);   
+    //gain.addInput(filter);
+    audioContext.out.addInput(filter);
     
     audioContext.start();
   }
@@ -81,7 +91,13 @@ class SamplerAudio {
     endGlide.setValue(loopEnd); 
   }
   
- 
+  void setFilterFreq(float freq) {
+    lpFreqGlide.setValue(freq); 
+  }
+  
+  void setFilterRez(float rez) {
+    lpRezGlide.setValue(rez); 
+  }
   
   
 }
