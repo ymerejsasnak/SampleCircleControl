@@ -4,6 +4,8 @@ class CircleControl {
  int offsetX, offsetY;
  int diameter;
  
+ color fillColor;
+ 
  boolean pressed;
  
  CircleControl(int x, int y) {
@@ -72,7 +74,7 @@ class CircleControl {
      fill(150);
    }
    else {
-     fill(100);
+     fill(fillColor);
    }
    
    if (mouseInside(mouseX, mouseY)) {
@@ -93,13 +95,14 @@ class RateCircle extends CircleControl {
  
   RateCircle(int x, int y) {
     super(x, y); 
+    fillColor = color(200, 0, 0);
   }
   
   
   void updateUgen() {
     
     float playRate = map(y, BORDER, height - BORDER, 2, 0);
-    samplerAudio.setPlayRate(playRate);
+    samplerAudio.setPitch(playRate);
     
     if (mouseX < width/2) {
       samplerAudio.setPlayReverse(); 
@@ -111,10 +114,12 @@ class RateCircle extends CircleControl {
 }
 
 
+
 class LoopCircle extends CircleControl {
  
   LoopCircle(int x, int y) {
     super(x, y); 
+    fillColor = color(0, 200, 0);
   }
   
   
@@ -127,5 +132,24 @@ class LoopCircle extends CircleControl {
     samplerAudio.setLoopLength(loopLength);
     
     
+  }
+}
+
+
+
+class GrainCircle extends CircleControl {
+ 
+  GrainCircle(int x, int y) {
+    super(x, y);
+    fillColor = color(0, 0, 200);
+  }
+  
+  void updateUgen() {
+    
+    float grainInterval = map(x, BORDER, width - BORDER, 1, 20);
+    float grainSize = map(y, BORDER, height - BORDER, 1, 10);
+    
+    samplerAudio.setGrainInterval(grainInterval);
+    samplerAudio.setGrainSize(grainSize);
   }
 }
