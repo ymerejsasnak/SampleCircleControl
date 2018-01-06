@@ -1,35 +1,30 @@
 void mousePressed() {
   
-  
-  if (circle.mouseInside(mouseX, mouseY)) {
-    circle.setPressed();
-    circle.calculateOffset(mouseX, mouseY); 
+  for (CircleControl c: circles) {
+    if (c.mouseInside(mouseX, mouseY)) {
+      c.setPressed();
+      c.calculateOffset(mouseX, mouseY); 
+    }
   }
+  
 }
 
 
 void mouseDragged() {
-  if (circle.isPressed()) {
-    circle.move(mouseX, mouseY); 
-    
-    float playRate = map(circle.getY(), BORDER, height - BORDER, 2, 0);
-    samplerAudio.setPlayRate(playRate);
-    
-    if (mouseX < width/2) {
-      samplerAudio.setPlayReverse(); 
-    }
-    else {
-      samplerAudio.setPlayForward(); 
-    }
-    
-    //float gain = map(circle.getY(), 0, height, 1, 0.0);
-    //gainGlide.setValue(gain);
- 
-  }
   
+  for (CircleControl c: circles) {
+    
+    if (c.isPressed()) {
+      c.move(mouseX, mouseY); 
+      c.updateUgen();
+    
+    }
+  }
 }
 
 
 void mouseReleased() {
-  circle.setReleased(); 
+  for (CircleControl c: circles) {
+    c.setReleased();
+  }
 }

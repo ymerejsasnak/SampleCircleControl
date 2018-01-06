@@ -62,6 +62,11 @@ class CircleControl {
  }
  
  
+ void updateUgen() {
+   
+ }
+ 
+ 
  void display() {
    if (pressed) {
      fill(150);
@@ -80,4 +85,47 @@ class CircleControl {
    ellipse(x, y, diameter, diameter);
  }
   
+}
+
+
+
+class RateCircle extends CircleControl {
+ 
+  RateCircle(int x, int y) {
+    super(x, y); 
+  }
+  
+  
+  void updateUgen() {
+    
+    float playRate = map(y, BORDER, height - BORDER, 2, 0);
+    samplerAudio.setPlayRate(playRate);
+    
+    if (mouseX < width/2) {
+      samplerAudio.setPlayReverse(); 
+    }
+    else {
+      samplerAudio.setPlayForward(); 
+    }
+  }
+}
+
+
+class LoopCircle extends CircleControl {
+ 
+  LoopCircle(int x, int y) {
+    super(x, y); 
+  }
+  
+  
+  void updateUgen() {
+    
+    float loopStart = map(y, BORDER, height - BORDER, 0.0, 1.0);
+    float loopLength = map(x, BORDER, width - BORDER, 0.01, 1.0);
+    
+    samplerAudio.setLoopStart(loopStart);
+    samplerAudio.setLoopLength(loopLength);
+    
+    
+  }
 }
