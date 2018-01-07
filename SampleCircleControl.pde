@@ -43,7 +43,7 @@ void setup() {
   circles.add(new LoopCircle(BORDER, height - BORDER));
   circles.add(new FilterCircle(BORDER, BORDER));
   circles.add(new CombCircle(width - BORDER, height - BORDER));
-  circles.add(new DelayCircle(BORDER, 725));
+  circles.add(new DelayCircle(width/2, height - BORDER));
   
   samplerAudio = new SamplerAudio();
 

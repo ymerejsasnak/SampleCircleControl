@@ -169,7 +169,7 @@ class CombCircle extends CircleControl {
     float feedback = map(y, BORDER, height - BORDER, .99, 0);
     
     samplerAudio.setCombTime(time);
-    samplerAudio.setFeedback(feedback);
+    samplerAudio.setCombFeedback(feedback);
     
   }
   
@@ -184,10 +184,10 @@ class DelayCircle extends CircleControl {
   }
   
   void updateUgen() {
+    float time = map(x, BORDER, width - BORDER, 100.0, 1000.0);
+    float feedback = map(y, BORDER, height - BORDER, .9, 0);
     
-    //time
-    //fback
-    
-    //setfback
+    samplerAudio.setDelayTime(time);
+    samplerAudio.setDelayFeedback(feedback);
   }
 }

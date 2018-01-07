@@ -66,9 +66,14 @@ class SamplerAudio {
     combTimeGlide = new Glide(audioContext, 40, 50);
     combDelayOut = new TapOut(audioContext, combDelayIn, combTimeGlide);
     
+    delayFeedbackGlide = new Glide(audioContext, 0.0, 50);
+    delayGain = new Gain(audioContext, 1, delayFeedbackGlide);
     
-    //Glide combTimeGlide, combFeedbackGlide;
-  //Glide delayTimeGlide, delayFeedbackGlide;
+    delayIn = new TapIn(audioContext, 2000);
+    delayTimeGlide = new Glide(audioContext, 1000, 50);
+    delayOut = new TapOut(audioContext, delayIn, delayTimeGlide);
+    
+   
     //gainGlide = new Glide(audioContext, 0.6, 50);
     //gain = new Gain(audioContext, 2, gainGlide);
     
@@ -78,9 +83,17 @@ class SamplerAudio {
     combDelayIn.addInput(filter);
     combGain.addInput(combDelayOut);
     combDelayIn.addInput(combGain);
+    
+    
+    delayIn.addInput(combGain);
+    delayIn.addInput(filter);
+    delayGain.addInput(delayOut);
+    delayIn.addInput(delayGain);
+    
     //gain.addInput(filter);
     audioContext.out.addInput(filter);
     audioContext.out.addInput(combGain);
+    audioContext.out.addInput(delayGain);
     
     audioContext.start();
   }
@@ -125,8 +138,15 @@ class SamplerAudio {
     combTimeGlide.setValue(time); 
   }
   
-  void setFeedback(float feedback) {
+  void setCombFeedback(float feedback) {
     combFeedbackGlide.setValue(feedback); 
   }
   
+  void setDelayTime(float time) {
+    delayTimeGlide.setValue(time); 
+  }
+  
+  void setDelayFeedback(float feedback) {
+    delayFeedbackGlide.setValue(feedback); 
+  }
 }
