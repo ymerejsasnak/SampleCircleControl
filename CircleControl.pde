@@ -95,7 +95,7 @@ class RateCircle extends CircleControl {
  
   RateCircle(int x, int y) {
     super(x, y); 
-    fillColor = color(200, 0, 0);
+    fillColor = color(200, 0, 0, 100);
   }
   
   
@@ -119,7 +119,7 @@ class LoopCircle extends CircleControl {
  
   LoopCircle(int x, int y) {
     super(x, y); 
-    fillColor = color(0, 200, 0);
+    fillColor = color(0, 200, 0, 100);
   }
   
   
@@ -143,15 +143,51 @@ class FilterCircle extends CircleControl {
  
   FilterCircle(int x, int y) {
     super(x, y);
-    fillColor = color(0, 0, 200);
+    fillColor = color(0, 0, 200, 100);
   }
   
   void updateUgen() {
     
     float filterFreq = map(y, BORDER, height - BORDER, 11025.0, 0.0);
-    float filterRez = map(x, BORDER, width - BORDER, .4, .9);
+    float filterRez = map(x, BORDER, width - BORDER, .4, .99);
     
     samplerAudio.setFilterFreq(filterFreq);
     samplerAudio.setFilterRez(filterRez);
+  }
+}
+
+
+class CombCircle extends CircleControl {
+  
+  CombCircle(int x, int y) {
+    super(x, y);
+    fillColor = color(0, 100, 100, 100);
+  }
+  
+  void updateUgen() {
+    float time = map(x, BORDER, width - BORDER, 2.0, 40.0);
+    float feedback = map(y, BORDER, height - BORDER, .99, 0);
+    
+    samplerAudio.setCombTime(time);
+    samplerAudio.setFeedback(feedback);
+    
+  }
+  
+}
+
+
+class DelayCircle extends CircleControl {
+  
+  DelayCircle(int x, int y) {
+    super(x, y);
+    fillColor = color(100, 0, 100, 100);
+  }
+  
+  void updateUgen() {
+    
+    //time
+    //fback
+    
+    //setfback
   }
 }

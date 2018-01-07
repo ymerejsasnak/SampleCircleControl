@@ -6,7 +6,12 @@ class SamplerAudio {
   
   SamplePlayer sampler;
   LPRezFilter filter;
-   
+  TapIn combDelayIn;
+  TapOut combDelayOut;
+  Gain combGain;
+  TapIn delayIn;
+  TapOut delayOut;
+  Gain delayGain; 
   Gain gain;
  
   
@@ -14,6 +19,8 @@ class SamplerAudio {
   Glide rateGlide, directionGlide;
   Glide startGlide, endGlide;
   Glide lpFreqGlide, lpRezGlide;
+  Glide combTimeGlide, combFeedbackGlide;
+  Glide delayTimeGlide, delayFeedbackGlide;
   
   int playDirection = 1;
  
@@ -51,14 +58,29 @@ class SamplerAudio {
     lpRezGlide = new Glide(audioContext, .4, 50);
     filter = new LPRezFilter(audioContext, 2 /*channels*/, lpFreqGlide, lpRezGlide);
     
-      
+    
+    combFeedbackGlide = new Glide(audioContext, 0.0, 50);
+    combGain = new Gain(audioContext, 1, combFeedbackGlide);
+    
+    combDelayIn = new TapIn(audioContext, 100);
+    combTimeGlide = new Glide(audioContext, 40, 50);
+    combDelayOut = new TapOut(audioContext, combDelayIn, combTimeGlide);
+    
+    
+    //Glide combTimeGlide, combFeedbackGlide;
+  //Glide delayTimeGlide, delayFeedbackGlide;
     //gainGlide = new Glide(audioContext, 0.6, 50);
     //gain = new Gain(audioContext, 2, gainGlide);
     
     
     filter.addInput(sampler);   
+    
+    combDelayIn.addInput(filter);
+    combGain.addInput(combDelayOut);
+    combDelayIn.addInput(combGain);
     //gain.addInput(filter);
     audioContext.out.addInput(filter);
+    audioContext.out.addInput(combGain);
     
     audioContext.start();
   }
@@ -99,5 +121,12 @@ class SamplerAudio {
     lpRezGlide.setValue(rez); 
   }
   
+  void setCombTime(float time) {
+    combTimeGlide.setValue(time); 
+  }
+  
+  void setFeedback(float feedback) {
+    combFeedbackGlide.setValue(feedback); 
+  }
   
 }
