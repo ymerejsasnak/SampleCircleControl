@@ -4,6 +4,7 @@ void mousePressed() {
     for (CircleControl c: circles) {
       if (c.mouseInside(mouseX, mouseY)) {
         c.setPressed();
+        c.clearPath();
         c.calculateOffset(mouseX, mouseY); 
         break; // only first circle in list moves
       }
@@ -12,6 +13,7 @@ void mousePressed() {
   if (mouseButton == RIGHT) { // move ALL circles at once
     for (CircleControl c: circles) {
       c.setPressed();
+      c.clearPath();
       c.calculateOffset(mouseX, mouseY);
     }
   }
@@ -26,7 +28,7 @@ void mouseDragged() {
     if (c.isPressed()) {
       c.move(mouseX, mouseY); 
       c.constrainToGrid();
-
+      c.addPoint();
     }
   }
 }

@@ -8,13 +8,19 @@ abstract class CircleControl {
  
  boolean pressed;
  
- int randomness = 0;
+ int randomness;
+ 
+ ArrayList<PVector> path;
+ int pathIndex;
  
  CircleControl(int x, int y) {
    this.x = x;
    this.y = y;
-   diameter = 20;
+   diameter = CIRCLE_DIAMETER;
    pressed = false;
+   randomness = 0;
+   path = new ArrayList<PVector>();
+   pathIndex = 0;
  }
  
  
@@ -34,7 +40,9 @@ abstract class CircleControl {
  
  
  boolean mouseInside(int _mouseX, int _mouseY) {
-   return dist(x, y, _mouseX, _mouseY) <= max(diameter / 2 + 1, randomness + 1); // +1 just to make clickable zone *slightly* bigger
+   return dist(x, y, _mouseX, _mouseY) <= diameter / 2 + 1 ||// +1 just to make clickable zone *slightly* bigger
+          (_mouseX > x - randomness && _mouseX < x + randomness && 
+           _mouseY > y - randomness && _mouseY < y + randomness);
  }
  
  
@@ -71,6 +79,16 @@ abstract class CircleControl {
    if (randomness > MAX_RANDOM) randomness = MAX_RANDOM;
  }
  
+ void addPoint() {
+   path.add(new PVector(x, y)); 
+ }
+ 
+ void clearPath() {
+   path.clear(); 
+   pathIndex = 0;
+ }
+ 
+ 
  void updateUgens(){
  }
  
@@ -84,6 +102,19 @@ abstract class CircleControl {
    float yRandom = random(y - randomness, y + randomness);
    float value = map(yRandom, BORDER, BORDER + GRID_SIZE, max, min);
    glide.setValue(value);
+ }
+ 
+ 
+ 
+ void updatePosition() {
+   int points = path.size();
+   if (points > 0) {
+     x = (int) path.get(pathIndex).x;
+     y = (int) path.get(pathIndex).y;
+     constrainToGrid();
+     pathIndex = (pathIndex + 1) % points;
+   }
+     
  }
  
  
@@ -109,6 +140,13 @@ abstract class CircleControl {
    rectMode(CENTER);
    fill(fillColor, RECT_ALPHA);
    rect(x, y, randomness * 2, randomness * 2);
+   
+   //draw path points
+   for (PVector point: path) {
+     fill(255);
+     noStroke();
+     ellipse(point.x, point.y, 1, 1);
+   }
  }
   
 }

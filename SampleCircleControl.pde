@@ -1,7 +1,9 @@
 /*
 adjust various things sonically (delay values, filter, etc)
 
--? way to record circle movements that it can then run through in loop?
+-control path mode with center button: standard/forward, pingpong, off
+-adjust speed of path following? (ie slow it down)
+
 constants for max/min values, etc.
 comments/cleanup
 */
@@ -20,6 +22,7 @@ final int DIRECTION_GLIDE_TIME = 50;
 
 final int MAX_RANDOM = 100;
 
+final int CIRCLE_DIAMETER = 50;
 final int CIRCLE_ALPHA = 50;
 final int RECT_ALPHA = 25;
 
@@ -59,10 +62,11 @@ void draw() {
   grid.display();
   
   for (CircleControl c: circles) {
+    c.updatePosition();
     c.display();
     c.updateUgens();
   }
   
-  
+  println(frameRate);
 
 }
