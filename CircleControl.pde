@@ -1,4 +1,4 @@
-class CircleControl {
+abstract class CircleControl {
   
  int x, y;
  int offsetX, offsetY;
@@ -13,16 +13,6 @@ class CircleControl {
    this.y = y;
    diameter = 20;
    pressed = false;
- }
- 
- 
- int getX() {
-   return x; 
- }
- 
- 
- int getY() {
-   return y; 
  }
  
  
@@ -57,15 +47,24 @@ class CircleControl {
    y = newY + offsetY;
    
    //constrain to grid
-   if (x < BORDER) x = BORDER;
-   if (x > width - BORDER) x = width - BORDER;
-   if (y < BORDER) y = BORDER;
-   if (y > height - BORDER) y = height - BORDER;
+   if (x < BORDER)  x = BORDER;
+   if (x > BORDER + GRID_SIZE)  x = BORDER + GRID_SIZE;
+   if (y < BORDER)  y = BORDER;
+   if (y > BORDER + GRID_SIZE) y = BORDER + GRID_SIZE;
  }
  
  
- void updateUgen() {
-   
+ void updateUgens(){
+ }
+ 
+ void setXUgen(float min, float max, Glide glide) {
+   float value = map(x, BORDER, BORDER + GRID_SIZE, min, max);
+   glide.setValue(value);
+ }
+ 
+ void setYUgen(float min, float max, Glide glide) {
+   float value = map(y, BORDER, BORDER + GRID_SIZE, max, min);
+   glide.setValue(value);
  }
  
  
@@ -74,120 +73,17 @@ class CircleControl {
      fill(150);
    }
    else {
-     fill(fillColor);
+     fill(fillColor, CIRCLE_ALPHA);
    }
    
    if (mouseInside(mouseX, mouseY)) {
      stroke(200);
    }
    else {
-     noStroke();
+     stroke(100);
    }
    
    ellipse(x, y, diameter, diameter);
  }
   
-}
-
-
-
-class RateCircle extends CircleControl {
- 
-  RateCircle(int x, int y) {
-    super(x, y); 
-    fillColor = color(200, 0, 0, 100);
-  }
-  
-  
-  void updateUgen() {
-    
-    float playRate = map(y, BORDER, height - BORDER, 2, 0);
-    samplerAudio.setRate(playRate);
-    
-    if (mouseX < width/2) {
-      samplerAudio.setPlayReverse(); 
-    }
-    else {
-      samplerAudio.setPlayForward(); 
-    }
-  }
-}
-
-
-
-class LoopCircle extends CircleControl {
- 
-  LoopCircle(int x, int y) {
-    super(x, y); 
-    fillColor = color(0, 200, 0, 100);
-  }
-  
-  
-  void updateUgen() {
-    
-    float loopStart = map(y, height - BORDER, BORDER, 0.0, .999);
-    float loopLength = map(x, BORDER, width - BORDER, 1.0, 0.001);
-    
-    samplerAudio.setLoopStart(loopStart);
-    samplerAudio.setLoopLength(loopLength);
-    
-    // if position gets out of loop boundaries, put it back to loop start
-    if (!samplerAudio.sampler.inLoop()) {
-      samplerAudio.sampler.setToLoopStart();
-    }
-  }
-}
-
-
-class FilterCircle extends CircleControl {
- 
-  FilterCircle(int x, int y) {
-    super(x, y);
-    fillColor = color(0, 0, 200, 100);
-  }
-  
-  void updateUgen() {
-    
-    float filterFreq = map(y, BORDER, height - BORDER, 11025.0, 0.0);
-    float filterRez = map(x, BORDER, width - BORDER, .4, .99);
-    
-    samplerAudio.setFilterFreq(filterFreq);
-    samplerAudio.setFilterRez(filterRez);
-  }
-}
-
-
-class CombCircle extends CircleControl {
-  
-  CombCircle(int x, int y) {
-    super(x, y);
-    fillColor = color(0, 100, 100, 100);
-  }
-  
-  void updateUgen() {
-    float time = map(x, BORDER, width - BORDER, 2.0, 40.0);
-    float feedback = map(y, BORDER, height - BORDER, .99, 0);
-    
-    samplerAudio.setCombTime(time);
-    samplerAudio.setCombFeedback(feedback);
-    
-  }
-  
-}
-
-
-class DelayCircle extends CircleControl {
-  
-  DelayCircle(int x, int y) {
-    super(x, y);
-    fillColor = color(100, 0, 100, 100);
-  }
-  
-  void updateUgen() {
-    float time = map(x, BORDER, width - BORDER, 100.0, 1000.0);
-    float feedback = map(y, BORDER, height - BORDER, .9, 0);
-    
-    samplerAudio.setDelayTime(time);
-    samplerAudio.setDelayFeedback(feedback);
-  }
 }

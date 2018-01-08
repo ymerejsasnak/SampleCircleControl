@@ -25,7 +25,7 @@ class SamplerAudio {
   int playDirection = 1;
  
     
-  String filename = dataPath("horns.wav");
+  String filename = dataPath("drums.wav");
   
   
   SamplerAudio() {
@@ -45,32 +45,32 @@ class SamplerAudio {
     sampler.setToLoopStart();
     sampler.setKillOnEnd(false);
         
-    rateGlide = new Glide(audioContext, 1, 50);
-    directionGlide = new Glide(audioContext, 1, 50);
-    sampler.setRate(rateGlide);
+    rateGlide = new Glide(audioContext, 1, GLIDE_TIME);
+    directionGlide = new Glide(audioContext, 1, DIRECTION_GLIDE_TIME);
+    sampler.setRate(new Mult(audioContext, rateGlide, directionGlide));
       
-    startGlide = new Glide(audioContext, 0, 50);
+    startGlide = new Glide(audioContext, 0, GLIDE_TIME);
     sampler.setLoopStart(startGlide);
-    endGlide = new Glide(audioContext, sampleLength, 50);
+    endGlide = new Glide(audioContext, sampleLength, GLIDE_TIME);
     sampler.setLoopEnd(endGlide);
     
-    lpFreqGlide = new Glide(audioContext, 11025, 50);
-    lpRezGlide = new Glide(audioContext, .4, 50);
+    lpFreqGlide = new Glide(audioContext, 11025, GLIDE_TIME);
+    lpRezGlide = new Glide(audioContext, .4, GLIDE_TIME);
     filter = new LPRezFilter(audioContext, 2 /*channels*/, lpFreqGlide, lpRezGlide);
     
     
-    combFeedbackGlide = new Glide(audioContext, 0.0, 50);
+    combFeedbackGlide = new Glide(audioContext, 0.0, GLIDE_TIME);
     combGain = new Gain(audioContext, 1, combFeedbackGlide);
     
     combDelayIn = new TapIn(audioContext, 100);
-    combTimeGlide = new Glide(audioContext, 40, 50);
+    combTimeGlide = new Glide(audioContext, 40, GLIDE_TIME);
     combDelayOut = new TapOut(audioContext, combDelayIn, combTimeGlide);
     
-    delayFeedbackGlide = new Glide(audioContext, 0.0, 50);
+    delayFeedbackGlide = new Glide(audioContext, 0.0, GLIDE_TIME);
     delayGain = new Gain(audioContext, 1, delayFeedbackGlide);
     
     delayIn = new TapIn(audioContext, 2000);
-    delayTimeGlide = new Glide(audioContext, 1000, 50);
+    delayTimeGlide = new Glide(audioContext, 1000, GLIDE_TIME);
     delayOut = new TapOut(audioContext, delayIn, delayTimeGlide);
     
    
@@ -100,19 +100,14 @@ class SamplerAudio {
   
   
   void setPlayForward() {
-    playDirection = 1;
+    directionGlide.setValue(1);
   }
   
   
   void setPlayReverse() {
-    playDirection = -1;
+    directionGlide.setValue(-1);
   }
-  
-  
-  void setRate(float rate) {
-    rateGlide.setValue(rate * playDirection);
-  }
-  
+    
   
   void setLoopStart(float loopStart) {
     startGlide.setValue(sampleLength * loopStart); 
@@ -126,27 +121,7 @@ class SamplerAudio {
     endGlide.setValue(loopEnd); 
   }
   
-  void setFilterFreq(float freq) {
-    lpFreqGlide.setValue(freq); 
-  }
-  
-  void setFilterRez(float rez) {
-    lpRezGlide.setValue(rez); 
-  }
-  
-  void setCombTime(float time) {
-    combTimeGlide.setValue(time); 
-  }
-  
-  void setCombFeedback(float feedback) {
-    combFeedbackGlide.setValue(feedback); 
-  }
-  
-  void setDelayTime(float time) {
-    delayTimeGlide.setValue(time); 
-  }
-  
-  void setDelayFeedback(float feedback) {
-    delayFeedbackGlide.setValue(feedback); 
+  void setGlideValue(Glide glide, float value) {
+    glide.setValue(value); 
   }
 }

@@ -1,16 +1,10 @@
 /*
--more circles controlling more things  (can probably make updateUgen method in subclasses more 'dry')
-   //-volume and pan?
-  combfilter style delay
-  delay time and fback (typical delay)
-  
+adjust various things sonically (delay values, filter, etc)
 
--way to select overlapped circles (z value?) (and alternate way, w/ right mouse?, to move all as one)
 ??-size of circle changeable with mousewheel (indicates random range of values w/in circle) [[actual separate rect]]
--draw output sample data (or draw wav file with a play indicator and loop markers, etc
 -? way to record circle movements that it can then run through in loop?
 constants for max/min values, etc.
-
+comments/cleanup
 */
 
 
@@ -18,7 +12,14 @@ import beads.*;
 
 
 final int BORDER = 50;
+final int SCREEN_SIZE = 800;
+final int GRID_SIZE = SCREEN_SIZE - BORDER * 2;
 final int GRID_DIVISIONS = 4;
+
+final int GLIDE_TIME = 500;
+final int DIRECTION_GLIDE_TIME = 50;
+
+final int CIRCLE_ALPHA = 50;
 
 
 SamplerAudio samplerAudio;
@@ -37,13 +38,11 @@ void setup() {
 
   circles = new ArrayList<CircleControl>();
   
-  
-  //move initial location to constructors?
-  circles.add(new RateCircle(width/2, height/2));
-  circles.add(new LoopCircle(BORDER, height - BORDER));
-  circles.add(new FilterCircle(BORDER, BORDER));
-  circles.add(new CombCircle(width - BORDER, height - BORDER));
-  circles.add(new DelayCircle(width/2, height - BORDER));
+  circles.add(new RateCircle());
+  circles.add(new LoopCircle());
+  circles.add(new FilterCircle());
+  circles.add(new CombCircle());
+  circles.add(new DelayCircle());
   
   samplerAudio = new SamplerAudio();
 
@@ -52,6 +51,7 @@ void setup() {
 
 
 void draw() {
+  
   background(0);
   
   for (CircleControl c: circles) {
@@ -60,5 +60,4 @@ void draw() {
   
   grid.display();
 
-  //println(frameRate);
 }
