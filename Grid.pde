@@ -12,6 +12,7 @@ class Grid {
     stroke(20);
     noFill();
     
+    rectMode(CORNER);
     for (int x = 0; x < divisions; x++) {
       for (int y = 0; y < divisions; y++) {
         rect(x * size + BORDER, y * size + BORDER, size, size);

@@ -1,7 +1,7 @@
 class RateCircle extends CircleControl {
  
   RateCircle() {
-    super(width/2, height/2); 
+    super(int(GRID_SIZE * .75) + BORDER, int(GRID_SIZE * .75) + BORDER); 
     fillColor = color(200, 0, 0);
   }
   
@@ -9,8 +9,8 @@ class RateCircle extends CircleControl {
   void updateUgens() {
     setYUgen(0.3, 3, samplerAudio.rateGlide);
     
-    
-    if (mouseX < width/2) {
+    float xRand = random(x - randomness, x + randomness);
+    if (xRand < width/2) {
       samplerAudio.setPlayReverse(); 
     }
     else {

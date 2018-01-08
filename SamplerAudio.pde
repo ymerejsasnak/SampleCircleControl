@@ -107,21 +107,5 @@ class SamplerAudio {
   void setPlayReverse() {
     directionGlide.setValue(-1);
   }
-    
-  
-  void setLoopStart(float loopStart) {
-    startGlide.setValue(sampleLength * loopStart); 
-  }
-  
-  void setLoopLength(float loopLength) {
-    float loopEnd = startGlide.getValue() + loopLength * sampleLength;
-    if (loopEnd > sampleLength) {
-      loopEnd = sampleLength - 1;
-    }
-    endGlide.setValue(loopEnd); 
-  }
-  
-  void setGlideValue(Glide glide, float value) {
-    glide.setValue(value); 
-  }
+
 }

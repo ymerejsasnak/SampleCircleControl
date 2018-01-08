@@ -1,15 +1,15 @@
 void mousePressed() {
   
   if (mouseButton == LEFT) {
-  for (CircleControl c: circles) {
-    if (c.mouseInside(mouseX, mouseY)) {
-      c.setPressed();
-      c.calculateOffset(mouseX, mouseY); 
-      break; // only first circle in list moves
+    for (CircleControl c: circles) {
+      if (c.mouseInside(mouseX, mouseY)) {
+        c.setPressed();
+        c.calculateOffset(mouseX, mouseY); 
+        break; // only first circle in list moves
+      }
     }
   }
-  }
-  if (mouseButton == RIGHT) {
+  if (mouseButton == RIGHT) { // move ALL circles at once
     for (CircleControl c: circles) {
       c.setPressed();
       c.calculateOffset(mouseX, mouseY);
@@ -25,8 +25,8 @@ void mouseDragged() {
     
     if (c.isPressed()) {
       c.move(mouseX, mouseY); 
-      c.updateUgens();
-    
+      c.constrainToGrid();
+
     }
   }
 }
@@ -35,5 +35,18 @@ void mouseDragged() {
 void mouseReleased() {
   for (CircleControl c: circles) {
     c.setReleased();
+  }
+}
+
+
+void mouseWheel(MouseEvent event) {
+  
+  for (CircleControl c: circles) {
+    if (c.mouseInside(mouseX, mouseY)) {
+      float wheel = event.getCount();
+      if (wheel == 1) c.increaseRandomness();
+      if (wheel == -1) c.decreaseRandomness();
+      c.constrainToGrid();
+    }
   }
 }

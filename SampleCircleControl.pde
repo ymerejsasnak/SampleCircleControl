@@ -1,7 +1,6 @@
 /*
 adjust various things sonically (delay values, filter, etc)
 
-??-size of circle changeable with mousewheel (indicates random range of values w/in circle) [[actual separate rect]]
 -? way to record circle movements that it can then run through in loop?
 constants for max/min values, etc.
 comments/cleanup
@@ -19,7 +18,10 @@ final int GRID_DIVISIONS = 4;
 final int GLIDE_TIME = 500;
 final int DIRECTION_GLIDE_TIME = 50;
 
+final int MAX_RANDOM = 100;
+
 final int CIRCLE_ALPHA = 50;
+final int RECT_ALPHA = 25;
 
 
 SamplerAudio samplerAudio;
@@ -54,10 +56,13 @@ void draw() {
   
   background(0);
   
+  grid.display();
+  
   for (CircleControl c: circles) {
     c.display();
+    c.updateUgens();
   }
   
-  grid.display();
+  
 
 }
