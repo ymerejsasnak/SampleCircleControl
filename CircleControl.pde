@@ -117,10 +117,14 @@ abstract class CircleControl {
  void clearPath() {
    path.clear(); 
    pathIndex = 0;
+   pathDirection = 1;
  }
  
  void cyclePathMode() {
-   pathMode = PathMode.values()[(pathMode.ordinal() + 1) % PathMode.values().length];     
+   pathMode = PathMode.values()[(pathMode.ordinal() + 1) % PathMode.values().length];  
+   if (pathMode == PathMode.OFF) {
+     clearPath();
+   }
  }
  
  void walkPath() {
@@ -129,7 +133,7 @@ abstract class CircleControl {
      x = (int) path.get(pathIndex).x;
      y = (int) path.get(pathIndex).y;
      constrainToGrid();
-     pathIndex = (pathIndex + pathDirection);
+     pathIndex = pathIndex + pathDirection;
      if (pathMode == PathMode.FORWARD) {
        pathIndex = pathIndex % points; 
      }

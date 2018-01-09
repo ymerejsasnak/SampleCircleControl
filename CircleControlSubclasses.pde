@@ -36,9 +36,9 @@ class LoopCircle extends CircleControl {
     setYUgen(sampleLength, 0, samplerAudio.endGlide);
         
     // if position gets out of loop boundaries, put it back to loop start
-    if (!samplerAudio.sampler.inLoop()) {
-      samplerAudio.sampler.setToLoopStart();
-    }
+    //if (!samplerAudio.sampler.inLoop()) {
+    //  samplerAudio.sampler.setToLoopStart();
+    //}
   }
 }
 

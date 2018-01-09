@@ -1,8 +1,13 @@
 /*
 
+extend window horizontally and have some controls on the right side:
 -load file
 -record to file
 -basic instructions/messages/coordinate values/labels for each circle kind of stuff
+-timer speed per circle?
+-path mode per circle??
+-glide time per circle???
+-adjustable ranges for fx?
 
 adjust various things sonically (delay values, filter, etc)
 constants for max/min values, etc.
