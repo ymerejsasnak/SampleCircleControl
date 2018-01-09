@@ -1,8 +1,5 @@
 /*
 
--control path mode with center button: standard/forward, pingpong, off
--adjust speed of path following? (ie slow it down)
-
 -load file
 -record to file
 -basic instructions/messages/coordinate values/labels for each circle kind of stuff
@@ -67,7 +64,7 @@ void draw() {
     grid.display();
     
     for (CircleControl c: circles) {
-      c.updatePosition();
+      c.walkPath();
       c.display();
       c.updateUgens();
     }

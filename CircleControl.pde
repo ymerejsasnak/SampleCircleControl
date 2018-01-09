@@ -1,3 +1,7 @@
+enum PathMode {
+  FORWARD, PINGPONG, OFF 
+}
+
 abstract class CircleControl {
   
  int x, y;
@@ -12,6 +16,9 @@ abstract class CircleControl {
  
  ArrayList<PVector> path;
  int pathIndex;
+ PathMode pathMode;
+ int pathDirection;
+ Timer pathTimer;
  
  CircleControl(int x, int y) {
    this.x = x;
@@ -21,6 +28,9 @@ abstract class CircleControl {
    randomness = 0;
    path = new ArrayList<PVector>();
    pathIndex = 0;
+   pathMode = PathMode.OFF;
+   pathDirection = 1;
+   pathTimer = new Timer(50);
  }
  
  
@@ -79,15 +89,7 @@ abstract class CircleControl {
    if (randomness > MAX_RANDOM) randomness = MAX_RANDOM;
  }
  
- void addPoint() {
-   path.add(new PVector(x, y)); 
- }
- 
- void clearPath() {
-   path.clear(); 
-   pathIndex = 0;
- }
- 
+  
  
  void updateUgens(){
  }
@@ -106,13 +108,34 @@ abstract class CircleControl {
  
  
  
- void updatePosition() {
+  void addPoint() {
+    if (pathMode != PathMode.OFF) {   
+      path.add(new PVector(x, y)); 
+    }
+  }
+ 
+ void clearPath() {
+   path.clear(); 
+   pathIndex = 0;
+ }
+ 
+ void cyclePathMode() {
+   pathMode = PathMode.values()[(pathMode.ordinal() + 1) % PathMode.values().length];     
+ }
+ 
+ void walkPath() {
    int points = path.size();
-   if (points > 0) {
+   if (points > 0 && pathTimer.checkTimer()) {
      x = (int) path.get(pathIndex).x;
      y = (int) path.get(pathIndex).y;
      constrainToGrid();
-     pathIndex = (pathIndex + 1) % points;
+     pathIndex = (pathIndex + pathDirection);
+     if (pathMode == PathMode.FORWARD) {
+       pathIndex = pathIndex % points; 
+     }
+     else if (pathMode == PathMode.PINGPONG && (pathIndex == 0 || pathIndex == points - 1)) {
+       pathDirection = -pathDirection;
+     }
    }
      
  }
@@ -142,6 +165,9 @@ abstract class CircleControl {
    rect(x, y, randomness * 2, randomness * 2);
    
    //draw path points
+   if (pathMode == PathMode.OFF) {
+     return;
+   }
    for (PVector point: path) {
      stroke(fillColor, CIRCLE_ALPHA);
      fill(fillColor, RECT_ALPHA);

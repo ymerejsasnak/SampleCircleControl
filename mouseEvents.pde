@@ -18,6 +18,12 @@ void mousePressed() {
     }
   }
   
+  if (mouseButton == CENTER) {
+    for (CircleControl c: circles) {
+      c.cyclePathMode(); 
+    }
+  }
+  
 }
 
 
