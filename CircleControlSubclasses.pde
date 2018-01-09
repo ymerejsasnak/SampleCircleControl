@@ -10,7 +10,7 @@ class RateCircle extends CircleControl {
     setYUgen(0.3, 3, samplerAudio.rateGlide);
     
     float xRand = random(x - randomness, x + randomness);
-    if (xRand < width/2) {
+    if (xRand < BORDER + GRID_SIZE/2) {
       samplerAudio.setPlayReverse(); 
     }
     else {
@@ -24,7 +24,7 @@ class RateCircle extends CircleControl {
 class LoopCircle extends CircleControl {
  
   LoopCircle() {
-    super(BORDER, height - BORDER); 
+    super(BORDER, BORDER + GRID_SIZE); 
     fillColor = color(0, 200, 0);
   }
   
@@ -34,11 +34,6 @@ class LoopCircle extends CircleControl {
     
     setXUgen(0, sampleLength, samplerAudio.startGlide);
     setYUgen(sampleLength, 0, samplerAudio.endGlide);
-        
-    // if position gets out of loop boundaries, put it back to loop start
-    //if (!samplerAudio.sampler.inLoop()) {
-    //  samplerAudio.sampler.setToLoopStart();
-    //}
   }
 }
 
@@ -60,7 +55,7 @@ class FilterCircle extends CircleControl {
 class CombCircle extends CircleControl {
   
   CombCircle() {
-    super(width - BORDER, height - BORDER);
+    super(BORDER + GRID_SIZE, BORDER + GRID_SIZE);
     fillColor = color(0, 100, 100);
   }
   
@@ -75,7 +70,7 @@ class CombCircle extends CircleControl {
 class DelayCircle extends CircleControl {
   
   DelayCircle() {
-    super(width/2, height - BORDER);
+    super(BORDER + GRID_SIZE/2, BORDER + GRID_SIZE);
     fillColor = color(100, 0, 100);
   }
   

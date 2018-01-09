@@ -129,7 +129,7 @@ abstract class CircleControl {
  
  void walkPath() {
    int points = path.size();
-   if (points > 0 && pathTimer.checkTimer()) {
+   if (points > 1 && pathTimer.checkTimer()) {
      x = (int) path.get(pathIndex).x;
      y = (int) path.get(pathIndex).y;
      constrainToGrid();
@@ -147,7 +147,7 @@ abstract class CircleControl {
  
  void display() {
    if (pressed) {
-     fill(150);
+     fill(fillColor, PRESSED_ALPHA);
    }
    else {
      fill(fillColor, CIRCLE_ALPHA);
@@ -173,9 +173,9 @@ abstract class CircleControl {
      return;
    }
    for (PVector point: path) {
-     stroke(fillColor, CIRCLE_ALPHA);
+     noStroke();
      fill(fillColor, RECT_ALPHA);
-     ellipse(point.x, point.y, 5, 5);
+     ellipse(point.x, point.y, 2, 2);
    }
  }
   

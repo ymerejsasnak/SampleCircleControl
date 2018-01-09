@@ -8,7 +8,9 @@ extend window horizontally and have some controls on the right side:
 -path mode per circle??
 -glide time per circle???
 -adjustable ranges for fx?
+-option to show or hide path drawing?
 
+fix how circles are drawn when drawing a path (ie flickers between origin and current pos)?
 adjust various things sonically (delay values, filter, etc)
 constants for max/min values, etc.
 comments/cleanup
@@ -19,8 +21,7 @@ import beads.*;
 
 
 final int BORDER = 50;
-final int SCREEN_SIZE = 800;
-final int GRID_SIZE = SCREEN_SIZE - BORDER * 2;
+final int GRID_SIZE = 700;
 final int GRID_DIVISIONS = 4;
 
 final int GLIDE_TIME = 500;
@@ -29,8 +30,11 @@ final int DIRECTION_GLIDE_TIME = 50;
 final int MAX_RANDOM = 100;
 
 final int CIRCLE_DIAMETER = 50;
-final int CIRCLE_ALPHA = 50;
-final int RECT_ALPHA = 25;
+final int CIRCLE_ALPHA = 70;
+final int PRESSED_ALPHA = 15;
+final int RECT_ALPHA = 50;
+final int SCREEN_BACKGROUND = 30;
+final int GRID_BACKGROUND = 10;
 
 
 SamplerAudio samplerAudio;
@@ -41,8 +45,8 @@ Grid grid;
 
 void setup() {
   
-  size(800, 800);
-  background(0);
+  size(1000, 800);
+  background(SCREEN_BACKGROUND);
   ellipseMode(CENTER);
   
   grid = new Grid(GRID_DIVISIONS);
@@ -64,7 +68,7 @@ void setup() {
 void draw() {
   if (samplerAudio.sampler != null) {
     
-    background(0);
+    background(SCREEN_BACKGROUND);
     
     grid.display();
     

@@ -5,12 +5,12 @@ class Grid {
   
   Grid(int divisions) {
     this.divisions = divisions;
-    size = (width - BORDER * 2) / divisions;
+    size = GRID_SIZE / divisions;
   }
   
   void display() {
-    stroke(20);
-    noFill();
+    stroke(SCREEN_BACKGROUND);
+    fill(GRID_BACKGROUND);
     
     rectMode(CORNER);
     for (int x = 0; x < divisions; x++) {
