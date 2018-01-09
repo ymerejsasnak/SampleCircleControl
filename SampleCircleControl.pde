@@ -1,9 +1,13 @@
 /*
-adjust various things sonically (delay values, filter, etc)
 
 -control path mode with center button: standard/forward, pingpong, off
 -adjust speed of path following? (ie slow it down)
 
+-load file
+-record to file
+-basic instructions/messages/coordinate values/labels for each circle kind of stuff
+
+adjust various things sonically (delay values, filter, etc)
 constants for max/min values, etc.
 comments/cleanup
 */
@@ -56,17 +60,19 @@ void setup() {
 
 
 void draw() {
+  if (samplerAudio.sampler != null) {
+    
+    background(0);
+    
+    grid.display();
+    
+    for (CircleControl c: circles) {
+      c.updatePosition();
+      c.display();
+      c.updateUgens();
+    }
   
-  background(0);
-  
-  grid.display();
-  
-  for (CircleControl c: circles) {
-    c.updatePosition();
-    c.display();
-    c.updateUgens();
   }
-  
-  println(frameRate);
+  //println(frameRate);
 
 }

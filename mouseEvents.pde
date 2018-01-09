@@ -49,6 +49,7 @@ void mouseWheel(MouseEvent event) {
       if (wheel == 1) c.increaseRandomness();
       if (wheel == -1) c.decreaseRandomness();
       c.constrainToGrid();
+      break;
     }
   }
 }

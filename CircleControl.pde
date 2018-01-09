@@ -143,9 +143,9 @@ abstract class CircleControl {
    
    //draw path points
    for (PVector point: path) {
-     fill(255);
-     noStroke();
-     ellipse(point.x, point.y, 1, 1);
+     stroke(fillColor, CIRCLE_ALPHA);
+     fill(fillColor, RECT_ALPHA);
+     ellipse(point.x, point.y, 5, 5);
    }
  }
   

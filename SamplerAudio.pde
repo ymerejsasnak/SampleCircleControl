@@ -1,4 +1,4 @@
-class SamplerAudio {
+public class SamplerAudio {
   
   AudioContext audioContext;
   
@@ -23,22 +23,19 @@ class SamplerAudio {
   Glide delayTimeGlide, delayFeedbackGlide;
   
   int playDirection = 1;
- 
-    
-  String filename = dataPath("drums.wav");
   
   
   SamplerAudio() {
     
     audioContext = new AudioContext();
     
-    try {
-      sampler = new SamplePlayer(audioContext, SampleManager.sample(filename));
-    }
-    catch (Exception e) {
-      println("error");
-      stop();
-    }
+    selectInput("load a file", "loadfile", dataFile("data"), this);
+  }
+  
+  
+  void loadSample(String fileName) {
+    sampler = new SamplePlayer(audioContext, SampleManager.sample(fileName));
+    
         
     sampleLength = (int)sampler.getSample().getLength();
     sampler.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
@@ -106,6 +103,14 @@ class SamplerAudio {
   
   void setPlayReverse() {
     directionGlide.setValue(-1);
+  }
+
+  
+  public void loadfile(File selection) {
+    if (selection == null) {}
+    else {
+     loadSample(selection.getAbsolutePath());
+   }
   }
 
 }
