@@ -21,9 +21,7 @@ public class SamplerAudio {
   Glide lpFreqGlide, lpRezGlide;
   Glide combTimeGlide, combFeedbackGlide;
   Glide delayTimeGlide, delayFeedbackGlide;
-  
-  int playDirection = 1;
-  
+
   
   SamplerAudio() {
     

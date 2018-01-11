@@ -3,17 +3,17 @@
 extend window horizontally and have some controls on the right side:
 -load file
 -record to file
--basic instructions/messages/coordinate values/labels for each circle kind of stuff
--timer speed per circle?
--path mode per circle??
--glide time per circle???
--adjustable ranges for fx?
--option to show or hide path drawing?
 
-fix how circles are drawn when drawing a path (ie flickers between origin and current pos)?
-adjust various things sonically (delay values, filter, etc)
+adjust various things sonically (delay values, filter, glide time, etc)
+
 constants for max/min values, etc.
 comments/cleanup
+
+
+possible future controls to add: 
+-timer speed per circle
+-path mode per circle
+-glide time per circle
 */
 
 
@@ -45,9 +45,10 @@ Grid grid;
 
 void setup() {
   
-  size(1000, 800);
+  size(800, 800);
   background(SCREEN_BACKGROUND);
   ellipseMode(CENTER);
+  textSize(20);
   
   grid = new Grid(GRID_DIVISIONS);
 
@@ -77,8 +78,8 @@ void draw() {
       c.display();
       c.updateUgens();
     }
-  
+    println(samplerAudio.startGlide.getValue(), samplerAudio.endGlide.getValue());
   }
-  //println(frameRate);
+  
 
 }

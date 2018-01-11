@@ -20,6 +20,8 @@ abstract class CircleControl {
  int pathDirection;
  Timer pathTimer;
  
+ String label;
+ 
  CircleControl(int x, int y) {
    this.x = x;
    this.y = y;
@@ -30,7 +32,7 @@ abstract class CircleControl {
    pathIndex = 0;
    pathMode = PathMode.OFF;
    pathDirection = 1;
-   pathTimer = new Timer(50);
+   pathTimer = new Timer(100);
  }
  
  
@@ -65,7 +67,6 @@ abstract class CircleControl {
  void move(int newX, int newY) {
    x = newX + offsetX;
    y = newY + offsetY;
-   
  }
  
  void constrainToGrid() {
@@ -122,23 +123,25 @@ abstract class CircleControl {
  
  void cyclePathMode() {
    pathMode = PathMode.values()[(pathMode.ordinal() + 1) % PathMode.values().length];  
-   if (pathMode == PathMode.OFF) {
-     clearPath();
-   }
+   //clearPath();
+   pathIndex = 0;
+   pathDirection = 1;
  }
  
  void walkPath() {
-   int points = path.size();
-   if (points > 1 && pathTimer.checkTimer()) {
-     x = (int) path.get(pathIndex).x;
-     y = (int) path.get(pathIndex).y;
-     constrainToGrid();
-     pathIndex = pathIndex + pathDirection;
-     if (pathMode == PathMode.FORWARD) {
-       pathIndex = pathIndex % points; 
-     }
-     else if (pathMode == PathMode.PINGPONG && (pathIndex == 0 || pathIndex == points - 1)) {
-       pathDirection = -pathDirection;
+   if (pathMode != PathMode.OFF && !isPressed()){
+     int points = path.size();
+     if (points > 1 && pathTimer.checkTimer()) {
+       x = (int) path.get(pathIndex).x;
+       y = (int) path.get(pathIndex).y;
+       constrainToGrid();
+       pathIndex = pathIndex + pathDirection;
+       if (pathMode == PathMode.FORWARD) {
+         pathIndex = pathIndex % points; 
+       }
+       else if (pathMode == PathMode.PINGPONG && (pathIndex == 0 || pathIndex == points - 1)) {
+         pathDirection = -pathDirection;
+       }
      }
    }
      
@@ -169,14 +172,14 @@ abstract class CircleControl {
    rect(x, y, randomness * 2, randomness * 2);
    
    //draw path points
-   if (pathMode == PathMode.OFF) {
-     return;
+   if (pathMode != PathMode.OFF) {
+     for (PVector point: path) {
+       noStroke();
+       fill(fillColor, RECT_ALPHA);
+       ellipse(point.x, point.y, 2, 2);
+     }
    }
-   for (PVector point: path) {
-     noStroke();
-     fill(fillColor, RECT_ALPHA);
-     ellipse(point.x, point.y, 2, 2);
-   }
+   
  }
   
 }
