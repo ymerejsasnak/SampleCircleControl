@@ -1,19 +1,21 @@
 /*
 
-extend window horizontally and have some controls on the right side:
--load file
 -record to file
 
 adjust various things sonically (delay values, filter, glide time, etc)
+ (and changing loop points when loading files of different length doesn't always sound right at first because of glide time)
 
 constants for max/min values, etc.
 comments/cleanup
 
 
-possible future controls to add: 
--timer speed per circle
--path mode per circle
--glide time per circle
+possible future stuff to add: 
+-control: timer speed per circle
+-control: path mode per circle
+-control: glide time per circle
+-circle: crossfade between 4 samples (100% at corner, 25% each at center, etc)
+-circle: ring mod/fm (frequency and mix)?
+-circle: reverb?
 */
 
 
@@ -62,6 +64,7 @@ void setup() {
   
   samplerAudio = new SamplerAudio();
 
+  
 }
 
 
@@ -78,8 +81,7 @@ void draw() {
       c.display();
       c.updateUgens();
     }
-    println(samplerAudio.startGlide.getValue(), samplerAudio.endGlide.getValue());
+
   }
-  
 
 }

@@ -27,11 +27,12 @@ public class SamplerAudio {
     
     audioContext = new AudioContext();
     
+    
     selectInput("load a file", "loadfile", dataFile("data"), this);
   }
   
   
-  void loadSample(String fileName) {
+  void initializeUgenRouting(String fileName) {
     sampler = new SamplePlayer(audioContext, SampleManager.sample(fileName));
     
         
@@ -106,9 +107,23 @@ public class SamplerAudio {
   
   public void loadfile(File selection) {
     if (selection == null) {}
+    else if (sampler == null) {
+      initializeUgenRouting(selection.getAbsolutePath());
+    }
     else {
-     loadSample(selection.getAbsolutePath());
-   }
+      sampler.setSample(SampleManager.sample(selection.getAbsolutePath()));
+      sampleLength = (int)sampler.getSample().getLength();
+      CircleControl loop = (LoopCircle) circles.get(1);
+      loop.updateUgens();
+      //loop.setXUgen(0, sampleLength, samplerAudio.startGlide);
+      //loop.setYUgen(sampleLength, 0, samplerAudio.endGlide); // have to update loop points because new file length probably different
+      audioContext.start();
+    }
+  }
+  
+  void loadNewFile() {
+    audioContext.stop(); 
+    selectInput("load a file", "loadfile", dataFile("data"), this);
   }
 
 }
