@@ -1,14 +1,11 @@
 void keyReleased() {
-  //L to load, R to record, R to record, S to stop recording 
+  //L to load, R to record, R to record, R again to stop recording 
   if (key == 'L' || key == 'l') {
-    println("a");
     samplerAudio.loadNewFile();
     
   }
   else if (key == 'R' || key == 'r') {
-    
+    samplerAudio.record();
   }
-  else if (key == 'S' || key == 's') {
-    
-  }
+
 }

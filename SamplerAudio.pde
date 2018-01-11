@@ -22,6 +22,8 @@ public class SamplerAudio {
   Glide combTimeGlide, combFeedbackGlide;
   Glide delayTimeGlide, delayFeedbackGlide;
 
+  Sample recordedOutput;
+  RecordToSample recorder;
   
   SamplerAudio() {
     
@@ -91,7 +93,14 @@ public class SamplerAudio {
     audioContext.out.addInput(combGain);
     audioContext.out.addInput(delayGain);
     
+    recordedOutput = new Sample(5000);
+    recorder = new RecordToSample(audioContext, recordedOutput, RecordToSample.Mode.INFINITE);
+    recorder.addInput(audioContext.out);
+    recorder.pause(true);
+    audioContext.out.addDependent(recorder);
+    
     audioContext.start();
+    println(recorder.isPaused());
   }
   
   
@@ -126,4 +135,28 @@ public class SamplerAudio {
     selectInput("load a file", "loadfile", dataFile("data"), this);
   }
 
+  void record() {
+    if (recorder.isPaused()) {
+      println("now recording");
+      recorder.pause(false);
+    }
+    else {
+      recorder.pause(true); 
+      recorder.clip();
+      
+      println(recordedOutput.getLength());
+      
+      String saveName = String.valueOf(year() + month() + day() + hour() + minute() + second() + millis());
+      try {
+        recordedOutput.write(dataPath(saveName + ".wav"), AudioFileType.WAV);
+        println("file " + saveName + ".wav saved");
+      }
+      catch (IOException e) {
+        println("couldn't save");
+      }
+      
+      recordedOutput.clear();
+      recorder.reset();
+    }
+  }
 }

@@ -8,7 +8,9 @@ adjust various things sonically (delay values, filter, glide time, etc)
 constants for max/min values, etc.
 comments/cleanup
 
+separate mode where recorded stuff replaces playing loop instead of saved as file!
 
+simplify controls? -- click on top bar to load, left bar to record into loop, bottom to record to file, right...?
 possible future stuff to add: 
 -control: timer speed per circle
 -control: path mode per circle
