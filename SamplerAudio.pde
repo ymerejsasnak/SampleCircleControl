@@ -1,3 +1,7 @@
+enum RecordMode {
+  REPLACE, MIX, FILE 
+}
+
 public class SamplerAudio {
   
   AudioContext audioContext;
@@ -94,14 +98,13 @@ public class SamplerAudio {
     audioContext.out.addInput(combGain);
     audioContext.out.addInput(delayGain);
     
-    recordedOutput = new Sample(5000);
+    recordedOutput = new Sample(100);
     recorder = new RecordToSample(audioContext, recordedOutput, RecordToSample.Mode.INFINITE);
     recorder.addInput(audioContext.out);
     recorder.pause(true);
     audioContext.out.addDependent(recorder);
     
     audioContext.start();
-    println(recorder.isPaused());
   }
   
   
@@ -116,6 +119,7 @@ public class SamplerAudio {
 
   
   public void loadfile(File selection) {
+    recorder.pause(true); //just in case??? or only run all this IF not recording?
     if (selection == null) {}
     else if (sampler == null) {
       initializeUgenRouting(selection.getAbsolutePath());
@@ -144,8 +148,8 @@ public class SamplerAudio {
     else {
       recorder.pause(true); 
       recorder.clip();
-      
-      println(recordedOutput.getLength());
+            
+      //should be about here where you select what to do based on record mode
       
       String saveName = String.valueOf(year() + month() + day() + hour() + minute() + second() + millis());
       try {
@@ -155,9 +159,8 @@ public class SamplerAudio {
       catch (IOException e) {
         println("couldn't save");
       }
-      
-      recordedOutput.clear();
-      //need to reset length
+      recordedOutput = new Sample(100);
+      recorder.setSample(recordedOutput);
       recorder.reset();
     }
   }

@@ -3,7 +3,6 @@ class RateCircle extends CircleControl {
   RateCircle() {
     super(int(GRID_SIZE * .75) + BORDER, int(GRID_SIZE * .75) + BORDER); 
     fillColor = color(200, 0, 0);
-    label = "Play Direction, Play Rate";
   }
   
   
@@ -29,7 +28,6 @@ class LoopCircle extends CircleControl {
   LoopCircle() {
     super(BORDER, BORDER + GRID_SIZE); 
     fillColor = color(0, 200, 0);
-    label = "Loop Start, Loop End";
   }
   
   
@@ -49,7 +47,6 @@ class FilterCircle extends CircleControl {
   FilterCircle() {
     super(BORDER, BORDER);
     fillColor = color(0, 0, 200);
-    label = "Filter Cutoff, Filter Resonance";
   }
   
   void updateUgens() {
@@ -66,12 +63,11 @@ class CombCircle extends CircleControl {
   CombCircle() {
     super(BORDER + GRID_SIZE, BORDER + GRID_SIZE);
     fillColor = color(0, 100, 100);
-    label = "Comb Delay Time, Comb Delay Feedback";
   }
   
   void updateUgens() {
-    setXUgen(2, 40, samplerAudio.combTimeGlide);
-    setYUgen(0, .95, samplerAudio.combFeedbackGlide);
+    setXUgen(1, 40, samplerAudio.combTimeGlide);
+    setYUgen(0, .8, samplerAudio.combFeedbackGlide);
   }
   
   
@@ -83,12 +79,11 @@ class DelayCircle extends CircleControl {
   DelayCircle() {
     super(BORDER + GRID_SIZE/2, BORDER + GRID_SIZE);
     fillColor = color(100, 0, 100);
-    label = "Echo Delay Time, Echo Delay Feedback";
   }
   
   void updateUgens() {
     setXUgen(100, 1000, samplerAudio.delayTimeGlide);
-    setYUgen(0, .9, samplerAudio.delayFeedbackGlide);
+    setYUgen(0, .8, samplerAudio.delayFeedbackGlide);
   }
   
   

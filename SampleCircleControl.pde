@@ -3,7 +3,7 @@
 separate mode where recorded stuff replaces playing loop instead of saved as file!
 simplify controls? -- click on top bar to load, left bar to record into loop, right to record to file, bottom to stop either record
 
-adjust various things sonically (delay values, filter, glide time, etc)
+adjust various things sonically (delay values, filter, glide time, etc) (delays make things too loud sometimes!)
  (and changing loop points when loading files of different length doesn't always sound right at first because of glide time)
 also, maybe change loop thing to start time and loop length rather than end time
 
@@ -16,8 +16,8 @@ possible future stuff to add:
 -control: path mode per circle
 -control: glide time per circle
 -circle: crossfade between 4 samples (100% at corner, 25% each at center, etc)
+    (in which case the grid parts can be buttons for load/record for each sample? (or some stuff)
 -circle: ring mod/fm (frequency and mix)?
--circle: reverb?
 -circle: grain stuff?
 -circle: volume/pan
 */
