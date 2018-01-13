@@ -40,6 +40,7 @@ public class SamplerAudio {
         
     sampleLength = (int)sampler.getSample().getLength();
     sampler.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
+    sampler.setInterpolationType(SamplePlayer.InterpolationType.CUBIC);
     sampler.setToLoopStart();
     sampler.setKillOnEnd(false);
         
@@ -156,6 +157,7 @@ public class SamplerAudio {
       }
       
       recordedOutput.clear();
+      //need to reset length
       recorder.reset();
     }
   }

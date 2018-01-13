@@ -1,16 +1,16 @@
 /*
 
--record to file
+separate mode where recorded stuff replaces playing loop instead of saved as file!
+simplify controls? -- click on top bar to load, left bar to record into loop, right to record to file, bottom to stop either record
 
 adjust various things sonically (delay values, filter, glide time, etc)
  (and changing loop points when loading files of different length doesn't always sound right at first because of glide time)
+also, maybe change loop thing to start time and loop length rather than end time
 
 constants for max/min values, etc.
 comments/cleanup
 
-separate mode where recorded stuff replaces playing loop instead of saved as file!
 
-simplify controls? -- click on top bar to load, left bar to record into loop, bottom to record to file, right...?
 possible future stuff to add: 
 -control: timer speed per circle
 -control: path mode per circle
@@ -18,6 +18,8 @@ possible future stuff to add:
 -circle: crossfade between 4 samples (100% at corner, 25% each at center, etc)
 -circle: ring mod/fm (frequency and mix)?
 -circle: reverb?
+-circle: grain stuff?
+-circle: volume/pan
 */
 
 
@@ -44,19 +46,23 @@ final int GRID_BACKGROUND = 10;
 SamplerAudio samplerAudio;
 
 ArrayList<CircleControl> circles;
+SideControls sideControls;
 Grid grid;
 
 
-void setup() {
+void setup() 
+{
   
   size(800, 800);
   background(SCREEN_BACKGROUND);
   ellipseMode(CENTER);
   textSize(20);
+  strokeWeight(3);
   
   grid = new Grid(GRID_DIVISIONS);
 
   circles = new ArrayList<CircleControl>();
+  sideControls = new SideControls();
   
   circles.add(new RateCircle());
   circles.add(new LoopCircle());
@@ -71,14 +77,17 @@ void setup() {
 
 
 
-void draw() {
-  if (samplerAudio.sampler != null) {
+void draw() 
+{
+  if (samplerAudio.sampler != null)
+  {
     
     background(SCREEN_BACKGROUND);
     
     grid.display();
     
-    for (CircleControl c: circles) {
+    for (CircleControl c: circles) 
+    {
       c.walkPath();
       c.display();
       c.updateUgens();

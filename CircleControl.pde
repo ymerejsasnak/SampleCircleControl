@@ -169,14 +169,15 @@ abstract class CircleControl {
    //draw the randomness rect
    rectMode(CENTER);
    fill(fillColor, RECT_ALPHA);
-   rect(x, y, randomness * 2, randomness * 2);
+   rect(x, y, randomness * 2, randomness * 2, 10);
    
    //draw path points
    if (pathMode != PathMode.OFF) {
      for (PVector point: path) {
-       noStroke();
-       fill(fillColor, RECT_ALPHA);
-       ellipse(point.x, point.y, 2, 2);
+       stroke(fillColor, 10);
+       
+       fill(fillColor, 25);
+       ellipse(point.x, point.y, 5, 5);
      }
    }
    

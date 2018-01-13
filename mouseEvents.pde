@@ -1,29 +1,35 @@
 void mousePressed() {
   
-  if (mouseButton == LEFT) {
-    for (CircleControl c: circles) {
-      if (c.mouseInside(mouseX, mouseY)) {
-        c.setPressed();
-        c.clearPath();
-        c.calculateOffset(mouseX, mouseY); 
-        break; // only first circle in list moves
-      }
-    }
-  }
-  if (mouseButton == RIGHT) { // move ALL circles at once
-    for (CircleControl c: circles) {
-      c.setPressed();
-      c.clearPath();
-      c.calculateOffset(mouseX, mouseY);
-    }
-  }
-  
-  if (mouseButton == CENTER) {
-    for (CircleControl c: circles) {
+  if (mouseButton == CENTER)
+  {
+    for (CircleControl c: circles)
+    {
       c.cyclePathMode(); 
     }
+    return;
   }
   
+  for (CircleControl c: circles)
+  {
+    if ( (mouseButton == LEFT && c.mouseInside(mouseX, mouseY)) || mouseButton == RIGHT) 
+    {
+      c.setPressed();
+      c.clearPath();
+      c.calculateOffset(mouseX, mouseY); 
+      if (mouseButton == LEFT) 
+      {
+      return; // only first circle in list moves
+      }
+    }
+    
+  }
+    
+  if (mouseButton == RIGHT) {
+    return;
+  }
+  
+  // check sides last, circles can overlap sides, circles come first
+  sideControls.checkSides(mouseX, mouseY);
 }
 
 
