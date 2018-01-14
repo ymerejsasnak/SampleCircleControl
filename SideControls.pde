@@ -19,7 +19,7 @@ class SideControls
     {
       println("l");
     }
-    // right bar - mix record with current loop
+    // right bar - mix record with current loop (maybe not)
     else if (_mouseX > BORDER + GRID_SIZE && _mouseY < GRID_SIZE - BORDER && _mouseY > BORDER) 
     {
       println("r");
@@ -27,7 +27,7 @@ class SideControls
     // bottom bar - record to file
     else if (_mouseX > BORDER && _mouseX < GRID_SIZE - BORDER && _mouseY > BORDER + GRID_SIZE) 
     {
-      samplerAudio.record();
+      samplerAudio.recordToFile();
     }
   }
 }

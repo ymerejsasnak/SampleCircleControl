@@ -1,24 +1,35 @@
-class Timer {
+class Timer 
+{
+  
   int waitTime;
   int startTime;
   
-  Timer(int waitTime) {
+  
+  Timer(int waitTime) 
+  {
     this.waitTime = waitTime; 
     startTime = millis();
   }
   
-  void resetTimer() {
+  
+  void resetTimer()
+  {
     startTime = millis(); 
   }
   
-  boolean checkTimer() {
-    if (millis() - startTime > waitTime) {
+  
+  boolean checkTimer()
+  {
+    if (millis() - startTime > waitTime)
+    {
       resetTimer();
       return true;
     }  
-    else {
+    else 
+    {
       return false; 
     }
+    
   }
   
 }

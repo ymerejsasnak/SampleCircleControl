@@ -57,9 +57,8 @@ void mouseWheel(MouseEvent event) {
   
   for (CircleControl c: circles) {
     if (c.mouseInside(mouseX, mouseY)) {
-      float wheel = event.getCount();
-      if (wheel == 1) c.increaseRandomness();
-      if (wheel == -1) c.decreaseRandomness();
+      int wheel = event.getCount();
+      c.changeRandomness(wheel);
       c.constrainToGrid();
       break;
     }

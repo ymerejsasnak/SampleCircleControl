@@ -107,6 +107,9 @@ public class SamplerAudio {
     audioContext.start();
   }
   
+  boolean hasSample() {
+    return sampler != null;  // ie returns true if sampler exists (better to check for sample itself)  
+  }
   
   void setPlayForward() {
     directionGlide.setValue(1);
@@ -119,7 +122,7 @@ public class SamplerAudio {
 
   
   public void loadfile(File selection) {
-    recorder.pause(true); //just in case??? or only run all this IF not recording?
+    //recorder.pause(true); //just in case??? or only run all this IF not recording?
     if (selection == null) {}
     else if (sampler == null) {
       initializeUgenRouting(selection.getAbsolutePath());
@@ -140,7 +143,7 @@ public class SamplerAudio {
     selectInput("load a file", "loadfile", dataFile("data"), this);
   }
 
-  void record() {
+  void recordToFile() {
     if (recorder.isPaused()) {
       println("now recording");
       recorder.pause(false);
@@ -148,9 +151,7 @@ public class SamplerAudio {
     else {
       recorder.pause(true); 
       recorder.clip();
-            
-      //should be about here where you select what to do based on record mode
-      
+                  
       String saveName = String.valueOf(year() + month() + day() + hour() + minute() + second() + millis());
       try {
         recordedOutput.write(dataPath(saveName + ".wav"), AudioFileType.WAV);
@@ -163,5 +164,9 @@ public class SamplerAudio {
       recorder.setSample(recordedOutput);
       recorder.reset();
     }
+  }
+  
+  void recordToLoop() {
+    
   }
 }
