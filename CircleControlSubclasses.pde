@@ -8,11 +8,9 @@ class RateCircle extends CircleControl
   }
   
   
-  void updateUgens() 
+  void updateUgens()
   {
-    setYUgen(0.3, 3, samplerAudio.rateGlide);
-    
-    float xRand = random(x - randomness, x + randomness);
+    float xRand = getValueInRange(x);
     if (xRand < BORDER + GRID_SIZE/2) 
     {
       samplerAudio.setPlayReverse(); 
@@ -21,7 +19,8 @@ class RateCircle extends CircleControl
     {
       samplerAudio.setPlayForward(); 
     }
-    
+  
+    setYUgen(RATE_MIN, RATE_MAX, samplerAudio.rateGlide);
   }
   
 }
@@ -60,8 +59,8 @@ class FilterCircle extends CircleControl
   
   void updateUgens()
   {
-    setXUgen(.4, .99, samplerAudio.lpRezGlide);
-    setYUgen(0, 11025, samplerAudio.lpFreqGlide);
+    setXUgen(LP_REZ_MIN, LP_REZ_MAX, samplerAudio.lpRezGlide);
+    setYUgen(LP_FREQ_MIN, LP_FREQ_MAX, samplerAudio.lpFreqGlide);
   }
   
 }
@@ -78,8 +77,8 @@ class CombCircle extends CircleControl
   
   void updateUgens()
   {
-    setXUgen(1, 40, samplerAudio.combTimeGlide);
-    setYUgen(0, .8, samplerAudio.combFeedbackGlide);
+    setXUgen(COMB_TIME_MIN, COMB_TIME_MAX, samplerAudio.combTimeGlide);
+    setYUgen(COMB_FEEDBACK_MIN, COMB_FEEDBACK_MAX, samplerAudio.combFeedbackGlide);
   }
   
 }
@@ -96,8 +95,8 @@ class DelayCircle extends CircleControl
   
   void updateUgens() 
   {
-    setXUgen(100, 1000, samplerAudio.delayTimeGlide);
-    setYUgen(0, .8, samplerAudio.delayFeedbackGlide);
+    setXUgen(DELAY_TIME_MIN, DELAY_TIME_MAX, samplerAudio.delayTimeGlide);
+    setYUgen(DELAY_FEEDBACK_MIN, DELAY_FEEDBACK_MAX, samplerAudio.delayFeedbackGlide);
   }
   
 }

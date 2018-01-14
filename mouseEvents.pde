@@ -1,4 +1,5 @@
-void mousePressed() {
+void mousePressed() 
+{
   
   if (mouseButton == CENTER)
   {
@@ -20,47 +21,56 @@ void mousePressed() {
       {
       return; // only first circle in list moves
       }
-    }
-    
+    }  
   }
     
-  if (mouseButton == RIGHT) {
-    return;
+  // check sides last, circles can overlap sides, circles come first
+  if (mouseButton == LEFT) {
+    sideControls.checkSides(mouseX, mouseY);
   }
   
-  // check sides last, circles can overlap sides, circles come first
-  sideControls.checkSides(mouseX, mouseY);
 }
 
 
-void mouseDragged() {
+void mouseDragged() 
+{
   
-  for (CircleControl c: circles) {
+  for (CircleControl c: circles)
+  {
     
-    if (c.isPressed()) {
+    if (c.isPressed())
+    {
       c.move(mouseX, mouseY); 
       c.constrainToGrid();
       c.addPoint();
-    }
+    } 
   }
+  
 }
 
 
-void mouseReleased() {
-  for (CircleControl c: circles) {
+void mouseReleased() 
+{
+  for (CircleControl c: circles)
+  {
     c.setReleased();
   }
+  
 }
 
 
-void mouseWheel(MouseEvent event) {
+void mouseWheel(MouseEvent event)
+{
   
-  for (CircleControl c: circles) {
-    if (c.mouseInside(mouseX, mouseY)) {
+  for (CircleControl c: circles)
+  {
+    if (c.mouseInside(mouseX, mouseY))
+    {
       int wheel = event.getCount();
       c.changeRandomness(wheel);
       c.constrainToGrid();
       break;
     }
   }
+  
 }

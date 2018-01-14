@@ -151,7 +151,7 @@ public class SamplerAudio {
     else {
       recorder.pause(true); 
       recorder.clip();
-                  
+                  //use SelectOutput to save file, not this junk!
       String saveName = String.valueOf(year() + month() + day() + hour() + minute() + second() + millis());
       try {
         recordedOutput.write(dataPath(saveName + ".wav"), AudioFileType.WAV);

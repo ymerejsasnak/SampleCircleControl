@@ -13,7 +13,7 @@ abstract class CircleControl
    
   boolean pressed;
    
-  int randomness;
+  int randomRange;
    
   PathMode pathMode;
   ArrayList<PVector> path;
@@ -27,7 +27,7 @@ abstract class CircleControl
      this.x = x;
      this.y = y;
      pressed = false;
-     randomness = 0;
+     randomRange = 0;
      path = new ArrayList<PVector>();
      pathIndex = 0;
      pathMode = PathMode.OFF;
@@ -62,8 +62,8 @@ abstract class CircleControl
   {
     // return true if inside circle or inside 'randomness square'
     return dist(x, y, _mouseX, _mouseY) <= CIRCLE_DIAMETER / 2 ||
-               (_mouseX > x - randomness && _mouseX < x + randomness && 
-               _mouseY > y - randomness && _mouseY < y + randomness);
+               (_mouseX > x - randomRange && _mouseX < x + randomRange && 
+               _mouseY > y - randomRange && _mouseY < y + randomRange);
   }
    
    
@@ -84,31 +84,31 @@ abstract class CircleControl
    
   void constrainToGrid()
   {
-    if (x < BORDER + randomness) 
+    if (x < BORDER + randomRange) 
     {  
-      x = BORDER + randomness;
+      x = BORDER + randomRange;
     }
-    else if (x > BORDER + GRID_SIZE - randomness)  
+    else if (x > BORDER + GRID_SIZE - randomRange)  
     {
-      x = BORDER + GRID_SIZE - randomness;
+      x = BORDER + GRID_SIZE - randomRange;
     }
     
-    if (y < BORDER + randomness)  
+    if (y < BORDER + randomRange)  
     {
-      y = BORDER + randomness;
+      y = BORDER + randomRange;
     }
-    else if (y > BORDER + GRID_SIZE - randomness) 
+    else if (y > BORDER + GRID_SIZE - randomRange) 
     {
-      y = BORDER + GRID_SIZE - randomness;
+      y = BORDER + GRID_SIZE - randomRange;
     }  
   }
    
    
   void changeRandomness(int wheelDirection)
   {
-    randomness -= RANDOM_INCREMENT * wheelDirection; 
-    if (randomness < 0) randomness = 0;
-    if (randomness > MAX_RANDOM) randomness = MAX_RANDOM;
+    randomRange -= RANDOM_INCREMENT * wheelDirection; 
+    if (randomRange < 0) randomRange = 0;
+    if (randomRange > MAX_RANDOM) randomRange = MAX_RANDOM;
   }
    
 
@@ -139,25 +139,30 @@ abstract class CircleControl
    
   void walkPath() 
   {
-    if (pathMode != PathMode.OFF && !isPressed())
+    if (pathMode == PathMode.OFF || isPressed())
     {
-      int points = path.size();
-      if (points > 1 && pathTimer.checkTimer()) 
-      {
-        x = (int) path.get(pathIndex).x;
-        y = (int) path.get(pathIndex).y;
-        constrainToGrid();
-        pathIndex = pathIndex + pathDirection;
-        if (pathMode == PathMode.FORWARD) 
-        {
-          pathIndex = pathIndex % points; 
-        }
-        else if (pathMode == PathMode.PINGPONG && (pathIndex == 0 || pathIndex == points - 1)) 
-        {
-          pathDirection = -pathDirection;
-        }
-      }
+      return;
     }
+    
+    int points = path.size();
+    if (points > 1 && pathTimer.checkTimer()) 
+    {
+      x = (int) path.get(pathIndex).x;
+      y = (int) path.get(pathIndex).y;
+      constrainToGrid();
+      pathIndex = pathIndex + pathDirection;
+      
+      if (pathMode == PathMode.FORWARD) 
+      {
+        pathIndex = pathIndex % points; 
+      }
+      else if (pathMode == PathMode.PINGPONG && (pathIndex == 0 || pathIndex == points - 1)) 
+      {
+        pathDirection = -pathDirection;
+      }
+      
+    }
+    
   }
   
   
@@ -165,24 +170,28 @@ abstract class CircleControl
     methods related to translating x,y coords and sending to ugens
   */
   
-  void updateUgens()
+  void updateUgens() 
   {
-    // nothing needed here? each subclass does it in a slightly unique way?????
+    
   }
-   
+    
+  float getValueInRange(int coordinate)
+  {
+    float value = random(coordinate - randomRange, coordinate + randomRange);
+    return value; 
+  }
+  
   void setXUgen(float min, float max, Glide glide)
   {
-    float xRandom = random(x - randomness, x + randomness);
-    float value = map(xRandom, BORDER, BORDER + GRID_SIZE, min, max);
-    glide.setValue(value);
+    glide.setValue( map( getValueInRange(x), BORDER, BORDER + GRID_SIZE, min, max ));
   }
    
   void setYUgen(float min, float max, Glide glide) 
   {
-    float yRandom = random(y - randomness, y + randomness);
-    float value = map(yRandom, BORDER, BORDER + GRID_SIZE, max, min);
-    glide.setValue(value);
+    glide.setValue( map( getValueInRange(y), BORDER, BORDER + GRID_SIZE, max, min ));
   }
+  
+  
    
    
   
@@ -213,7 +222,7 @@ abstract class CircleControl
     //draw the randomness square
     rectMode(CENTER);
     fill(fillColor, RECT_ALPHA);
-    rect(x, y, randomness * 2, randomness * 2, 5); //the 5 is for slightly rounded corners
+    rect(x, y, randomRange * 2, randomRange * 2, RANDOM_SQUARE_CORNER);
     
     //draw path points
     if (pathMode != PathMode.OFF) 

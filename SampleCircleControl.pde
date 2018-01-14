@@ -1,7 +1,6 @@
 /*
 cleanup/refactor -
-  updateUgens and setUgenx/y both need to be refactored (in circle control AND subclasses)
-  circcont.walkpath - redo? (its a mess of nested ifs)
+  
   whole sampleraudio class needs real looking at
   side controls is fine (it will have different function in future - record to file, unload all, etc)
   a second look at mouseevents may be good too
