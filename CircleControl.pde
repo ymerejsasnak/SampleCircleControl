@@ -172,7 +172,7 @@ abstract class CircleControl
   
   void updateUgens() 
   {
-    
+    // blank thing to make this callable from loop for subclasses ... try an interface instead?
   }
     
   float getValueInRange(int coordinate)

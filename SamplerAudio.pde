@@ -1,5 +1,5 @@
 enum RecordMode {
-  REPLACE, MIX, FILE 
+  TO_LOOP, TO_FILE 
 }
 
 public class SamplerAudio {

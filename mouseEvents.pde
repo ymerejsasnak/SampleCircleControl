@@ -5,7 +5,11 @@ void mousePressed()
   {
     for (CircleControl c: circles)
     {
-      c.cyclePathMode(); 
+      if (c.mouseInside(mouseX, mouseY))
+      {
+        c.cyclePathMode(); 
+        return;  
+      }
     }
     return;
   }
