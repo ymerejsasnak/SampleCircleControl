@@ -1,30 +1,45 @@
-class SideControls 
+class SurfaceListener 
 {
   
+  int lastSelectedSamplerIndex;
   
-  SideControls() 
+  SurfaceListener() 
   {
-     
+     lastSelectedSamplerIndex = -1;
   }
   
+  
+  int getLastSelectedIndex() {
+    return lastSelectedSamplerIndex; 
+  }
+  
+  
+  void checkCells (int _mouseX, int _mouseY)
+  {
+    
+  }
+  
+  
+  //TEMPORARILY LEFT IN, NEEDS TO CHANGE TO FIT NEW STRUCTURE
   void checkSides(int _mouseX, int _mouseY) 
   {
-    // top bar - load file
+    // top bar - e
     if (_mouseX > BORDER && _mouseX < GRID_SIZE - BORDER && _mouseY < BORDER) 
     {
+      lastSelectedSamplerIndex = 0;
       samplerAudio.loadNewFile();
     }
-    // left bar - record to new loop
+    // left bar - 
     else if (_mouseX < BORDER && _mouseY < GRID_SIZE - BORDER && _mouseY > BORDER) 
     {
       println("l");
     }
-    // right bar - mix record with current loop (maybe not)
+    // right bar - 
     else if (_mouseX > BORDER + GRID_SIZE && _mouseY < GRID_SIZE - BORDER && _mouseY > BORDER) 
     {
       println("r");
     }
-    // bottom bar - record to file
+    // bottom bar - 
     else if (_mouseX > BORDER && _mouseX < GRID_SIZE - BORDER && _mouseY > BORDER + GRID_SIZE) 
     {
       samplerAudio.recordToFile();

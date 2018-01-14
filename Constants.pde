@@ -1,7 +1,10 @@
 
 final int BORDER = 50;
+
 final int GRID_SIZE = 700;
-final int GRID_DIVISIONS = 4;
+final int GRID_CELLS = 4;
+final int CELL_SIZE = GRID_SIZE / GRID_CELLS;
+
 final int CIRCLE_DIAMETER = 50;
 final int PATH_POINT_DIAMETER = 5;
 final int RANDOM_SQUARE_CORNER = 5;

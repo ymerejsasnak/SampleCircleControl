@@ -28,9 +28,10 @@ void mousePressed()
     }  
   }
     
-  // check sides last, circles can overlap sides, circles come first
+  // check surface clicks last, only if left button and no circles clicked 
   if (mouseButton == LEFT) {
-    sideControls.checkSides(mouseX, mouseY);
+    surfaceListener.checkSides(mouseX, mouseY);//?temp?
+    surfaceListener.checkCells(mouseX, mouseY);
   }
   
 }

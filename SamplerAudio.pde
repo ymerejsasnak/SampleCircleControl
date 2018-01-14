@@ -1,14 +1,17 @@
-enum RecordMode {
+enum RecordMode
+{
   TO_LOOP, TO_FILE 
 }
 
-public class SamplerAudio {
+public class SamplerAudio 
+{
   
   AudioContext audioContext;
   
-  int sampleLength;
+  SamplePlayer[] samplers;
+  int[] sampleLengths;
   
-  SamplePlayer sampler;
+  
   LPRezFilter filter;
   TapIn combDelayIn;
   TapOut combDelayOut;
@@ -19,9 +22,11 @@ public class SamplerAudio {
   Gain gain;
  
   
+  Glide[] startGlides;
+  Glide[] endGlides;
+  
   Glide gainGlide;
   Glide rateGlide, directionGlide;
-  Glide startGlide, endGlide;
   Glide lpFreqGlide, lpRezGlide;
   Glide combTimeGlide, combFeedbackGlide;
   Glide delayTimeGlide, delayFeedbackGlide;
@@ -29,39 +34,32 @@ public class SamplerAudio {
   Sample recordedOutput;
   RecordToSample recorder;
   
-  SamplerAudio() {
-    
+  SamplerAudio() 
+  {
+       
     audioContext = new AudioContext();
     
+    samplers = new SamplePlayer[4];
+    sampleLengths = new int[4]; 
     
-    selectInput("load a file", "loadfile", dataFile("data"), this);
-  }
-  
-  
-  void initializeUgenRouting(String fileName) {
-    sampler = new SamplePlayer(audioContext, SampleManager.sample(fileName));
-    
-        
-    sampleLength = (int)sampler.getSample().getLength();
-    sampler.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
-    sampler.setInterpolationType(SamplePlayer.InterpolationType.CUBIC);
-    sampler.setToLoopStart();
-    sampler.setKillOnEnd(false);
-        
     rateGlide = new Glide(audioContext, 1, GLIDE_TIME);
     directionGlide = new Glide(audioContext, 1, DIRECTION_GLIDE_TIME);
-    sampler.setRate(new Mult(audioContext, rateGlide, directionGlide));
-      
-    startGlide = new Glide(audioContext, 0, GLIDE_TIME);
-    sampler.setLoopStart(startGlide);
-    endGlide = new Glide(audioContext, sampleLength, GLIDE_TIME);
-    sampler.setLoopEnd(endGlide);
     
+    startGlides = new Glide[4];
+    endGlides = new Glide[4];
+    for (int index = 0; index < 4; index++)
+    {
+      startGlides[index] = new Glide(audioContext, 0, GLIDE_TIME);      
+      endGlides[index] = new Glide(audioContext, 1, GLIDE_TIME);
+    }
+        
+        // need scaling mixer
+        // need mix gain for each sampler
+        
     lpFreqGlide = new Glide(audioContext, 11025, GLIDE_TIME);
     lpRezGlide = new Glide(audioContext, .4, GLIDE_TIME);
     filter = new LPRezFilter(audioContext, 2 /*channels*/, lpFreqGlide, lpRezGlide);
-    
-    
+        
     combFeedbackGlide = new Glide(audioContext, 0.0, GLIDE_TIME);
     combGain = new Gain(audioContext, 1, combFeedbackGlide);
     
@@ -76,17 +74,9 @@ public class SamplerAudio {
     delayTimeGlide = new Glide(audioContext, 1000, GLIDE_TIME);
     delayOut = new TapOut(audioContext, delayIn, delayTimeGlide);
     
-   
-    //gainGlide = new Glide(audioContext, 0.6, 50);
-    //gain = new Gain(audioContext, 2, gainGlide);
-    
-    
-    filter.addInput(sampler);   
-    
     combDelayIn.addInput(filter);
     combGain.addInput(combDelayOut);
     combDelayIn.addInput(combGain);
-    
     
     delayIn.addInput(combGain);
     delayIn.addInput(filter);
@@ -105,11 +95,92 @@ public class SamplerAudio {
     audioContext.out.addDependent(recorder);
     
     audioContext.start();
+    
+    
+    //selectInput("load a file", "loadfile", dataFile("data"), this);
   }
   
-  boolean hasSample() {
-    return sampler != null;  // ie returns true if sampler exists (better to check for sample itself)  
+  
+  void loadNewFile()
+  {
+    //audioContext.stop();  //???
+    selectInput("load a file", "loader", dataFile("data"), this);
   }
+  
+    
+  public void loader(File selection)
+  {
+    //recorder.pause(true); //just in case??? or only run all this IF not recording?
+    if (selection == null) {}
+    
+    else {
+      setupSampler(surfaceListener.getLastSelectedIndex(), selection.getAbsolutePath());
+    }
+  }
+  
+  
+  
+  void setupSampler(int samplerIndex, String fileName) 
+  {
+    if (samplers[samplerIndex] == null)
+    {
+      samplers[samplerIndex] = new SamplePlayer(audioContext, SampleManager.sample(fileName));
+
+      samplers[samplerIndex].setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
+      samplers[samplerIndex].setInterpolationType(SamplePlayer.InterpolationType.CUBIC);
+      samplers[samplerIndex].setKillOnEnd(false);
+      
+      samplers[samplerIndex].setRate(new Mult(audioContext, rateGlide, directionGlide));
+       
+      sampleLengths[samplerIndex] = (int)samplers[samplerIndex].getSample().getLength();  
+       
+      samplers[samplerIndex].setLoopStart(startGlides[samplerIndex]);
+            
+      samplers[samplerIndex].setLoopEnd(endGlides[samplerIndex]);
+      endGlides[samplerIndex].setValueImmediately(sampleLengths[samplerIndex]);
+    
+      filter.addInput(samplers[samplerIndex]); 
+    }
+    
+    else
+    {
+      samplers[samplerIndex].setSample(SampleManager.sample(fileName));
+      samplers[samplerIndex].setToLoopStart();
+      
+      sampleLengths[samplerIndex] = (int)samplers[samplerIndex].getSample().getLength();
+      
+                  
+      endGlides[samplerIndex].setValueImmediately(sampleLengths[samplerIndex]);
+    
+      
+      CircleControl loop = (LoopCircle) circles.get(1);
+      loop.updateUgens();
+      
+      
+      
+    
+    }
+    
+      
+    //gainGlide = new Glide(audioContext, 0.6, 50);
+    //gain = new Gain(audioContext, 2, gainGlide);
+    
+    //audioContext.start(); //?
+        
+  }
+  
+  
+  /*boolean noSamplers() {
+    for (int samplerIndex = 0; samplerIndex < 4; samplerIndex++)
+    {
+      if (samplers[samplerIndex] != null)
+      {
+        return false;
+      }
+    }
+    return true;  
+  }*/
+  
   
   void setPlayForward() {
     directionGlide.setValue(1);
@@ -121,27 +192,7 @@ public class SamplerAudio {
   }
 
   
-  public void loadfile(File selection) {
-    //recorder.pause(true); //just in case??? or only run all this IF not recording?
-    if (selection == null) {}
-    else if (sampler == null) {
-      initializeUgenRouting(selection.getAbsolutePath());
-    }
-    else {
-      sampler.setSample(SampleManager.sample(selection.getAbsolutePath()));
-      sampleLength = (int)sampler.getSample().getLength();
-      CircleControl loop = (LoopCircle) circles.get(1);
-      loop.updateUgens();
-      //loop.setXUgen(0, sampleLength, samplerAudio.startGlide);
-      //loop.setYUgen(sampleLength, 0, samplerAudio.endGlide); // have to update loop points because new file length probably different
-      audioContext.start();
-    }
-  }
-  
-  void loadNewFile() {
-    audioContext.stop(); 
-    selectInput("load a file", "loadfile", dataFile("data"), this);
-  }
+ 
 
   void recordToFile() {
     if (recorder.isPaused()) {

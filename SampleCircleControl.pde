@@ -2,21 +2,20 @@
 
 TO DO:
 
-=cleanup/refactor SamplerAudio class  
-
-=change loop thing to start time and loop length rather than end time?
-
 =four samplers!
-  -switch SamplerAudio to not automatically ask for file at the beginning (no file is ok, nothing happens)
+
   -then allow 4 files to be loaded separately (use scalingmixer then all routed the same)
   -be sure waves can be loaded in any or none, avoid null pointers
   -this is done by clicking respective corner grid boxes (have to add functionality to grid class)
-  
+(ALSO TEMPORARILY ONLY LOADS SAMPLE INTO SLOT 1 (IE INDEX 0) BY CLICKING TOP BAR)
+
+=change loop thing to start time and loop length rather than end time?
+
 =other grid controls:
   -inner grid boxes turn on recording INTO loop
   
 =side controls
-  -entire border area: record to file
+  -entire border area: record to file (use selectOutput())
 
 =then ANY non-circle leftclick turns off any recording
   
@@ -39,7 +38,7 @@ import beads.*;
 SamplerAudio samplerAudio;
 
 ArrayList<CircleControl> circles;
-SideControls sideControls;
+SurfaceListener surfaceListener;
 Grid grid;
 
 
@@ -53,10 +52,10 @@ void setup()
   textSize(20);
   strokeWeight(3);
   
-  grid = new Grid(GRID_DIVISIONS);
+  grid = new Grid();
 
   circles = new ArrayList<CircleControl>();
-  sideControls = new SideControls();
+  surfaceListener = new SurfaceListener();
   
   circles.add(new RateCircle());
   circles.add(new LoopCircle());
@@ -77,14 +76,16 @@ void draw()
   
   grid.display();
   
-  if (samplerAudio.hasSample())
+  
+  for (CircleControl c: circles) 
   {
-    for (CircleControl c: circles) 
-    {
-      c.walkPath();
-      c.display();
-      c.updateUgens();
-    }
+    c.walkPath();
+    c.display();
+    c.updateUgens();
   } 
+  if (samplerAudio.samplers[0] != null)
+  println(samplerAudio.startGlides[0].getValue(),
+          samplerAudio.samplers[0].getPosition(),
+          samplerAudio.endGlides[0].getValue());
 
 }

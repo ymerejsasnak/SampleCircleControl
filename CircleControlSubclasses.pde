@@ -32,17 +32,19 @@ class LoopCircle extends CircleControl
  
   LoopCircle()
   {
-    super(BORDER, BORDER + GRID_SIZE); 
+    super(BORDER + GRID_SIZE, BORDER + GRID_SIZE); 
     fillColor = color(0, 200, 0);
   }
   
   
   void updateUgens() 
   {
-    float sampleLength = samplerAudio.sampleLength;
-    
-    setXUgen(0, sampleLength, samplerAudio.startGlide);
-    setYUgen(sampleLength, 0, samplerAudio.endGlide);
+    for (int samplerIndex = 0; samplerIndex < 4; samplerIndex++) 
+    {
+      int sampleLength = samplerAudio.sampleLengths[samplerIndex];
+      setXUgen(0, sampleLength, samplerAudio.endGlides[samplerIndex]);
+      setYUgen(0, sampleLength, samplerAudio.startGlides[samplerIndex]);
+    }
   }  
   
 }
@@ -71,7 +73,7 @@ class CombCircle extends CircleControl
   
   CombCircle()
   {
-    super(BORDER + GRID_SIZE, BORDER + GRID_SIZE);
+    super(BORDER + GRID_SIZE / 4 * 3, BORDER + GRID_SIZE);
     fillColor = color(0, 100, 100);
   }
   

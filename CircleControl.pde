@@ -170,10 +170,8 @@ abstract class CircleControl
     methods related to translating x,y coords and sending to ugens
   */
   
-  void updateUgens() 
-  {
-    // blank thing to make this callable from loop for subclasses ... try an interface instead?
-  }
+  abstract void updateUgens();
+    
     
   float getValueInRange(int coordinate)
   {
@@ -181,10 +179,12 @@ abstract class CircleControl
     return value; 
   }
   
+  
   void setXUgen(float min, float max, Glide glide)
   {
     glide.setValue( map( getValueInRange(x), BORDER, BORDER + GRID_SIZE, min, max ));
   }
+   
    
   void setYUgen(float min, float max, Glide glide) 
   {

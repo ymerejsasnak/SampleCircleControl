@@ -1,31 +1,24 @@
-class Grid 
+class Grid
 {
   
-  int divisions;
-  int size;
-  
-  
-  Grid(int divisions)
+  Grid()
   {
-    this.divisions = divisions;
-    size = GRID_SIZE / divisions;
+    
   }
   
   
   void display() 
   {
-    stroke(SCREEN_BACKGROUND);
-    fill(GRID_BACKGROUND);
-    
-    rectMode(CORNER);
-    for (int x = 0; x < divisions; x++)
+    for (int x = 0; x < GRID_CELLS; x++)
     {
-      for (int y = 0; y < divisions; y++) 
+      for (int y = 0; y < GRID_CELLS; y++)
       {
-        rect(x * size + BORDER, y * size + BORDER, size, size);
+        stroke(SCREEN_BACKGROUND);
+        fill(GRID_BACKGROUND);
+        rectMode(CORNER);
+        rect(x * CELL_SIZE + BORDER, y * CELL_SIZE + BORDER, CELL_SIZE, CELL_SIZE);
       }
     }
-    
   }
   
 }
