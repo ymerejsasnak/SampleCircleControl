@@ -22,6 +22,7 @@ final color GRID_BACKGROUND = 10;
 final int RANDOM_INCREMENT = 5;
 final int MAX_RANDOM = 100;
 
+final int PATH_POINT_TIME = 50;
 
 final int GLIDE_TIME = 100;
 final int DIRECTION_GLIDE_TIME = 5;

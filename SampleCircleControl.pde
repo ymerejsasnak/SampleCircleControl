@@ -20,8 +20,8 @@ TO DO:
 =then ANY non-circle leftclick turns off any recording
   
 =add circles:
-  -sample crossfade (100% at corner, 25% each at center, etc)
-  -ring mode/fm (freq and mix)
+  -sample crossfade (100% at corner, 25% each at center, etc) (links to 4 gains actually)
+  -ring mod/fm (freq and mix)
   -vol and pan
 
 =various final adjustments

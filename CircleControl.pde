@@ -32,7 +32,7 @@ abstract class CircleControl
      pathIndex = 0;
      pathMode = PathMode.OFF;
      pathDirection = 1;
-     pathTimer = new Timer(100);
+     pathTimer = new Timer(PATH_POINT_TIME);
   }
    
   
