@@ -27,16 +27,18 @@ final int PATH_POINT_TIME = 50;
 final int GLIDE_TIME = 100;
 final int DIRECTION_GLIDE_TIME = 5;
 
+final float MAX_SAMPLER_GAIN = 5;
+
 final float RATE_MIN = .125; // 3 octaves down
-final float RATE_MAX = 8; // 3 octaves up
+final float RATE_MAX = 2; // 1 octave up
 
 final float LP_REZ_MIN = .4;
 final float LP_REZ_MAX = .99;
 final int LP_FREQ_MIN = 100;
 final int LP_FREQ_MAX = 11025;
 
-final int COMB_TIME_MIN = 1;
-final int COMB_TIME_MAX = 25;
+final float COMB_TIME_MIN = .01;
+final int COMB_TIME_MAX = 15;
 final int COMB_FEEDBACK_MIN = 0;
 final float COMB_FEEDBACK_MAX = .7;
 

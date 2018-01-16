@@ -20,11 +20,13 @@ public class SamplerAudio
   TapOut delayOut;
   Gain delayGain; 
   Gain gain;
- 
+
+  Gain[] samplerGains;
   
+  Glide[] gainGlides;
   Glide[] startGlides;
   Glide[] endGlides;
-  
+   
   Glide gainGlide;
   Glide rateGlide, directionGlide;
   Glide lpFreqGlide, lpRezGlide;
@@ -45,10 +47,14 @@ public class SamplerAudio
     rateGlide = new Glide(audioContext, 1, GLIDE_TIME);
     directionGlide = new Glide(audioContext, 1, DIRECTION_GLIDE_TIME);
     
+    samplerGains = new Gain[4];
+    gainGlides = new Glide[4];
     startGlides = new Glide[4];
     endGlides = new Glide[4];
     for (int index = 0; index < 4; index++)
     {
+      gainGlides[index] = new Glide(audioContext, MAX_SAMPLER_GAIN, GLIDE_TIME);
+      samplerGains[index] = new Gain(audioContext, 2, gainGlides[index]);
       startGlides[index] = new Glide(audioContext, 0, GLIDE_TIME);      
       endGlides[index] = new Glide(audioContext, 1, GLIDE_TIME);
     }
@@ -73,6 +79,7 @@ public class SamplerAudio
     delayIn = new TapIn(audioContext, 2000);
     delayTimeGlide = new Glide(audioContext, 1000, GLIDE_TIME);
     delayOut = new TapOut(audioContext, delayIn, delayTimeGlide);
+    
     
     combDelayIn.addInput(filter);
     combGain.addInput(combDelayOut);
@@ -139,7 +146,8 @@ public class SamplerAudio
       samplers[samplerIndex].setLoopEnd(endGlides[samplerIndex]);
       endGlides[samplerIndex].setValueImmediately(sampleLengths[samplerIndex]);
     
-      filter.addInput(samplers[samplerIndex]); 
+      samplerGains[samplerIndex].addInput(samplers[samplerIndex]);
+      filter.addInput(samplerGains[samplerIndex]); 
     }
     
     else

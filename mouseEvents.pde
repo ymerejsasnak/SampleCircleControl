@@ -30,7 +30,7 @@ void mousePressed()
     
   // check surface clicks last, only if left button and no circles clicked 
   if (mouseButton == LEFT) {
-    surfaceListener.checkSides(mouseX, mouseY);//?temp?
+    //surfaceListener.checkSides(mouseX, mouseY);//?temp?
     surfaceListener.checkCells(mouseX, mouseY);
   }
   

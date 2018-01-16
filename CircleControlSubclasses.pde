@@ -102,3 +102,44 @@ class DelayCircle extends CircleControl
   }
   
 }
+
+
+class CrossFadeCircle extends CircleControl
+{
+  CrossFadeCircle()
+  {
+    super(BORDER + GRID_SIZE / 2, BORDER + GRID_SIZE / 2);
+    fillColor = color(100, 100, 0);
+  }
+   
+  void updateUgens()
+  {
+    //just do this ugly and directly for now unless/until I find a better way
+    float distance, gain;
+    float x_ = random(x - randomRange, x + randomRange);
+    float y_ = random(y - randomRange, y + randomRange);
+    
+    distance = dist(x_, y_, BORDER, BORDER);
+    gain = MAX_SAMPLER_GAIN - map(distance, 0, GRID_SIZE, 0, MAX_SAMPLER_GAIN);
+    if (gain < 0) gain = 0;
+    samplerAudio.gainGlides[0].setValue(gain);
+    
+    distance = dist(x_, y_, width - BORDER, BORDER);
+    gain = MAX_SAMPLER_GAIN - map(distance, 0, GRID_SIZE, 0, MAX_SAMPLER_GAIN);
+    if (gain < 0) gain = 0;
+    samplerAudio.gainGlides[1].setValue(gain);
+    
+    distance = dist(x_, y_, BORDER, height - BORDER);
+    gain = MAX_SAMPLER_GAIN - map(distance, 0, GRID_SIZE, 0, MAX_SAMPLER_GAIN);
+    if (gain < 0) gain = 0;
+    samplerAudio.gainGlides[2].setValue(gain);
+    
+    distance = dist(x_, y_, width - BORDER, height - BORDER);
+    gain = MAX_SAMPLER_GAIN - map(distance, 0, GRID_SIZE, 0, MAX_SAMPLER_GAIN);
+    if (gain < 0) gain = 0;
+    samplerAudio.gainGlides[3].setValue(gain);
+        
+    
+  }
+   
+}

@@ -2,10 +2,12 @@ class SurfaceListener
 {
   
   int lastSelectedSamplerIndex;
+  boolean loadButton;
   
   SurfaceListener() 
   {
      lastSelectedSamplerIndex = -1;
+     loadButton = false;
   }
   
   
@@ -15,8 +17,37 @@ class SurfaceListener
   
   
   void checkCells (int _mouseX, int _mouseY)
-  {
+  { //this is kind of ugly, eh?
+    if (_mouseX > BORDER && _mouseX < BORDER + CELL_SIZE &&
+        _mouseY > BORDER && _mouseY < BORDER + CELL_SIZE)
+      {
+        lastSelectedSamplerIndex = 0; 
+        loadButton = true;
+      }
+    else if (_mouseX > BORDER + CELL_SIZE * 3 && _mouseX < width - BORDER &&
+             _mouseY > BORDER && _mouseY < BORDER + CELL_SIZE)
+      {
+        lastSelectedSamplerIndex = 1;
+        loadButton = true;
+      }
+    else if (_mouseX > BORDER && _mouseX < BORDER + CELL_SIZE &&
+             _mouseY > BORDER + CELL_SIZE * 3 && _mouseY < height - BORDER)
+      {
+        lastSelectedSamplerIndex = 2; 
+        loadButton = true;
+      }
+    else if (_mouseX > BORDER + CELL_SIZE * 3 && _mouseX < width - BORDER &&
+             _mouseY > BORDER + CELL_SIZE * 3 && _mouseY < height - BORDER)
+      {
+        lastSelectedSamplerIndex = 3; 
+        loadButton = true;
+      }
     
+    if (loadButton)
+    {
+      samplerAudio.loadNewFile();
+      loadButton = false;
+    }
   }
   
   
@@ -26,8 +57,9 @@ class SurfaceListener
     // top bar - e
     if (_mouseX > BORDER && _mouseX < GRID_SIZE - BORDER && _mouseY < BORDER) 
     {
-      lastSelectedSamplerIndex = 0;
-      samplerAudio.loadNewFile();
+      //lastSelectedSamplerIndex = 0;
+      //samplerAudio.loadNewFile();
+      
     }
     // left bar - 
     else if (_mouseX < BORDER && _mouseY < GRID_SIZE - BORDER && _mouseY > BORDER) 

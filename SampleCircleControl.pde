@@ -1,13 +1,7 @@
 /*
 
 TO DO:
-
-=four samplers!
-
-  -then allow 4 files to be loaded separately (use scalingmixer then all routed the same)
-  -be sure waves can be loaded in any or none, avoid null pointers
-  -this is done by clicking respective corner grid boxes (have to add functionality to grid class)
-(ALSO TEMPORARILY ONLY LOADS SAMPLE INTO SLOT 1 (IE INDEX 0) BY CLICKING TOP BAR)
+(gross code in crossfade circle updateugen function!)
 
 =change loop thing to start time and loop length rather than end time?
 
@@ -20,14 +14,13 @@ TO DO:
 =then ANY non-circle leftclick turns off any recording
   
 =add circles:
-  -sample crossfade (100% at corner, 25% each at center, etc) (links to 4 gains actually)
   -ring mod/fm (freq and mix)
   -vol and pan
 
 =various final adjustments
  -ugen settings (fx values, glide times (loop point glide time too slow sometimes?), etc)
  -path timer speed?
- -maybe some more gain control to avoid loud/clipping issues
+ -maybe some more gain control/compressor to avoid loud/clipping issues
 
 */
 
@@ -62,6 +55,7 @@ void setup()
   circles.add(new FilterCircle());
   circles.add(new CombCircle());
   circles.add(new DelayCircle());
+  circles.add(new CrossFadeCircle());
   
   samplerAudio = new SamplerAudio();
 
@@ -83,9 +77,6 @@ void draw()
     c.display();
     c.updateUgens();
   } 
-  if (samplerAudio.samplers[0] != null)
-  println(samplerAudio.startGlides[0].getValue(),
-          samplerAudio.samplers[0].getPosition(),
-          samplerAudio.endGlides[0].getValue());
+  
 
 }
